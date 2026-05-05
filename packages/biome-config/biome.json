@@ -1,5 +1,10 @@
 {
   "root": false,
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
@@ -30,6 +35,7 @@
         "useConst": "error"
       },
       "suspicious": {
+        "noArrayIndexKey": "off",
         "noDoubleEquals": "error",
         "noConsole": "off"
       }

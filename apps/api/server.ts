@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 
-import { healthRoute } from './routes/health.ts';
+import { healthRoute } from '@/routes/health.ts';
 
 const fastify = Fastify({
   logger: true
