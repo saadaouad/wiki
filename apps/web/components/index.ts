@@ -17,6 +17,6 @@ export {
   NavigationMenuItem,
   NavigationMenuList
 } from './navigation-menu';
-export { default as NewspaperArticleViewer } from './newspaper-article-viewer';
-export { NewspaperCard } from './newspaper-card';
-export { default as NewspaperEditor } from './newspaper-editor';
+export { default as WikiArticleViewer } from './wiki-article-viewer';
+export { WikiCard } from './wiki-card';
+export { default as WikiEditor } from './wiki-editor';

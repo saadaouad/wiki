@@ -4,7 +4,7 @@
 
 ```bash
 # Node.js 24 or higher is required for this project
-git clone https://github.com/saadaouad/newspaper.git
-cd newspaper
+git clone https://github.com/saadaouad/wiki.git
+cd wiki
 npm run dev
 ```

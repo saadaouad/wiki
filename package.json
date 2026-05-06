@@ -1,5 +1,5 @@
 {
-  "name": "newspaper",
+  "name": "wiki",
   "private": true,
   "scripts": {
     "build": "turbo run build",

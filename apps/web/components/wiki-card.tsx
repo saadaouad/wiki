@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './card';
-import type { NewsPaperCardProps } from '@/types/newspaper';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './index';
+import type { WikiCardProps } from '@/types/wiki';
 
-export const NewspaperCard = ({ title, author, date, summary, href }: NewsPaperCardProps) => {
+export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) => {
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -14,7 +14,7 @@ export const NewspaperCard = ({ title, author, date, summary, href }: NewsPaperC
         </div>
         <CardTitle className="text-lg">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="py-0">
+      <CardContent className="py-0 h-20">
         <CardDescription>{summary}</CardDescription>
       </CardContent>
       <CardFooter className="pt-2">

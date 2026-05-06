@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import { cn } from '@/utils/cn';
-import { NavBar } from '@/components/nav-bar';
+import { NavBar } from '@/components/index';
 import './globals.css';
 
 const geistSans = localFont({
@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Newspaper',
-  description: 'Newspaper is a platform for reading news'
+  title: 'Wiki',
+  description: 'Wiki is a platform for reading wikis'
 };
 
 const RootLayout = ({

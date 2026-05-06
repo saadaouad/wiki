@@ -1,4 +1,4 @@
-export interface NewsPaperCardProps {
+export interface WikiCardProps {
   title: string;
   author: string;
   date: string;
@@ -6,20 +6,20 @@ export interface NewsPaperCardProps {
   href: string;
 }
 
-export interface NewspaperEditorProps {
+export interface WikiEditorProps {
   initialTitle?: string;
   initialContent?: string;
   isEditing?: boolean;
   articleId?: string;
 }
 
-export interface NewspaperEditorFormPayload {
+export interface WikiEditorFormPayload {
   title: string;
   content: string;
   files: File[];
 }
 
-export interface NewspaperEditorFormErrors {
+export interface WikiEditorFormErrors {
   title?: string;
   content?: string;
 }
@@ -33,7 +33,7 @@ export interface ViewerArticle {
   imageUrl?: string | null;
 }
 
-export interface NewspaperArticleViewerProps {
+export interface WikiArticleViewerProps {
   article: ViewerArticle;
   canEdit?: boolean;
   pageviews?: number | null;
