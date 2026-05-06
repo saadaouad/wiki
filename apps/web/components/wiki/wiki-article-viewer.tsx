@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 
-import { Badge, Button, Card, CardContent } from './index';
+import { Badge, Button, Card, CardContent } from '../index';
 import type { WikiArticleViewerProps } from '@/types/wiki';
 
 const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps) => {

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Button, NavigationMenu, NavigationMenuItem, NavigationMenuList } from './index';
+import { Button, NavigationMenu, NavigationMenuItem, NavigationMenuList } from '../index';
 
 export const NavBar = () => {
   return (

@@ -1,5 +1,5 @@
-export { Badge } from './badge';
-export { Button } from './button';
+export { Badge } from './ui/badge';
+export { Button } from './ui/button';
 export {
   Card,
   CardAction,
@@ -8,15 +8,15 @@ export {
   CardFooter,
   CardHeader,
   CardTitle
-} from './card';
-export { Input } from './input';
-export { Label } from './label';
-export { NavBar } from './nav-bar';
+} from './ui/card';
+export { Input } from './ui/input';
+export { Label } from './ui/label';
+export { NavBar } from './nav/nav-bar';
 export {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList
-} from './navigation-menu';
-export { default as WikiArticleViewer } from './wiki-article-viewer';
-export { WikiCard } from './wiki-card';
-export { default as WikiEditor } from './wiki-editor';
+} from './nav/navigation-menu';
+export { default as WikiArticleViewer } from './wiki/wiki-article-viewer';
+export { WikiCard } from './wiki/wiki-card';
+export { default as WikiEditor } from './wiki/wiki-editor';

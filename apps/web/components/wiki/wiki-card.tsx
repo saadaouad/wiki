@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './index';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../index';
 import type { WikiCardProps } from '@/types/wiki';
 
 export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) => {
