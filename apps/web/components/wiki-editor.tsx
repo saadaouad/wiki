@@ -5,15 +5,8 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Upload, X } from 'lucide-react';
 
-import { Button } from './button';
-import { Card, CardContent, CardHeader, CardTitle } from './card';
-import { Input } from './input';
-import { Label } from './label';
-import type {
-  NewspaperEditorFormErrors,
-  NewspaperEditorFormPayload,
-  NewspaperEditorProps
-} from '@/types/newspaper';
+import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from './index';
+import type { WikiEditorFormErrors, WikiEditorFormPayload, WikiEditorProps } from '@/types/wiki';
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
@@ -24,20 +17,20 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   )
 });
 
-const NewspaperEditor = ({
+const WikiEditor = ({
   initialTitle = '',
   initialContent = '',
   isEditing = false,
   articleId
-}: NewspaperEditorProps) => {
+}: WikiEditorProps) => {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
   const [files, setFiles] = useState<File[]>([]);
-  const [errors, setErrors] = useState<NewspaperEditorFormErrors>({});
+  const [errors, setErrors] = useState<WikiEditorFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateForm = (): boolean => {
-    const newErrors: NewspaperEditorFormErrors = {};
+    const newErrors: WikiEditorFormErrors = {};
 
     if (!title.trim()) {
       newErrors.title = 'Title is required';
@@ -72,7 +65,7 @@ const NewspaperEditor = ({
 
     setIsSubmitting(true);
 
-    const formData: NewspaperEditorFormPayload = {
+    const formData: WikiEditorFormPayload = {
       title: title.trim(),
       content: content.trim(),
       files
@@ -234,4 +227,4 @@ const NewspaperEditor = ({
   );
 };
 
-export default NewspaperEditor;
+export default WikiEditor;

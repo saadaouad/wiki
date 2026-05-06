@@ -1,5 +1,5 @@
-import NewspaperArticleViewer from '@/components/newspaper-article-viewer';
-import type { PageProps } from '@/types/newspaper';
+import { WikiArticleViewer } from '@/components/index';
+import type { PageProps } from '@/types/wiki';
 
 const ViewArticlePage = async ({ params }: PageProps) => {
   const { id } = await params;
@@ -97,7 +97,7 @@ Happy writing! 🚀`,
     imageUrl: '/placeholder-image.svg'
   };
 
-  return <NewspaperArticleViewer article={mockArticle} canEdit={canEdit} />;
+  return <WikiArticleViewer article={mockArticle} canEdit={canEdit} />;
 };
 
 export default ViewArticlePage;

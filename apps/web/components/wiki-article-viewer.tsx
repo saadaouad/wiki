@@ -5,12 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 
-import { Badge } from './badge';
-import { Button } from './button';
-import { Card, CardContent } from './card';
-import type { NewspaperArticleViewerProps } from '@/types/newspaper';
+import { Badge, Button, Card, CardContent } from './index';
+import type { WikiArticleViewerProps } from '@/types/wiki';
 
-const NewspaperArticleViewer = ({ article, canEdit = false }: NewspaperArticleViewerProps) => {
+const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -176,4 +174,4 @@ const NewspaperArticleViewer = ({ article, canEdit = false }: NewspaperArticleVi
   );
 };
 
-export default NewspaperArticleViewer;
+export default WikiArticleViewer;

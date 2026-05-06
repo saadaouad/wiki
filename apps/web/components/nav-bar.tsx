@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
-import { Button } from './button';
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from './navigation-menu';
+import { Button, NavigationMenu, NavigationMenuItem, NavigationMenuList } from './index';
 
 export const NavBar = () => {
   return (
@@ -9,7 +8,7 @@ export const NavBar = () => {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <Link href="/" className="font-bold text-xl tracking-tight text-gray-900">
-            Newspaper
+            Wiki
           </Link>
         </div>
         <NavigationMenu>

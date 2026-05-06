@@ -1,5 +1,5 @@
-import NewspaperEditor from '@/components/newspaper-editor';
-import type { PageProps } from '@/types/newspaper';
+import { WikiEditor } from '@/components/index';
+import type { PageProps } from '@/types/wiki';
 
 const EditArticlePage = async ({ params }: PageProps) => {
   const { id } = await params;
@@ -27,7 +27,7 @@ This would normally be fetched from your API.`
       : {};
 
   return (
-    <NewspaperEditor
+    <WikiEditor
       initialTitle={mockData.title}
       initialContent={mockData.content}
       isEditing={true}
