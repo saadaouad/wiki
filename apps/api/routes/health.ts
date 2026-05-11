@@ -5,7 +5,7 @@ export const healthRoute = (fastify: FastifyInstance) => {
     return reply.code(200).send({
       status: 'OK',
       timestamp: new Date().toISOString(),
-      service: 'Newspaper API'
+      service: 'Wiki API'
     });
   });
 };

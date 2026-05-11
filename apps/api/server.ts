@@ -1,20 +1,42 @@
+import cors from '@fastify/cors';
+import helmet from '@fastify/helmet';
 import Fastify from 'fastify';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
-import { healthRoute } from '@/routes/health.ts';
+import { errorHandler } from '@/middleware/errorHandler.ts';
+import { healthRoute, authRoutes } from '@/routes/index.ts';
+import { env } from '@/env.ts';
 
-const fastify = Fastify({
-  logger: true
+const app = Fastify({
+  logger: true,
+  disableRequestLogging: process.env.NODE_ENV === 'test'
 });
 
-fastify.register(healthRoute);
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
 
-const port = Number(process.env.PORT) || 3001;
+await app.register(helmet);
+await app.register(cors, {
+  origin: env.CORS_ORIGIN,
+  credentials: true
+});
+
+await app.register(healthRoute);
+
+await app.register(authRoutes, {
+  prefix: '/api/auth'
+});
+
+errorHandler(app);
 
 const start = async () => {
   try {
-    await fastify.listen({ port });
+    await app.listen({
+      host: env.HOST,
+      port: env.PORT
+    });
   } catch (err) {
-    fastify.log.error(err);
+    app.log.error(err);
     process.exit(1);
   }
 };
