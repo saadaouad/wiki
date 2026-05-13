@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { loginSchema, type z } from '@repo/schema-validation';
 
 import {
   Button,
@@ -19,17 +19,7 @@ import {
 } from '@/components/index';
 import { useMutation } from '@/hooks/useMutation';
 
-const signInSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, 'Email is required')
-    .email('Invalid email')
-    .transform((v) => v.toLowerCase()),
-  password: z.string().min(1, 'Password is required').min(6, 'Password is short')
-});
-
-type SignInValues = z.input<typeof signInSchema>;
+type SignInValues = z.input<typeof loginSchema>;
 
 type LoginResponse = { token?: string; error?: string };
 
@@ -41,7 +31,7 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors }
   } = useForm<SignInValues>({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' }
   });
 
@@ -53,8 +43,9 @@ const SignIn = () => {
     });
 
     if (mutate.error) return;
+    if (!mutate.token) return;
 
-    localStorage.setItem('token', mutate.token!);
+    localStorage.setItem('token', mutate.token);
     router.push('/');
     router.refresh();
   });

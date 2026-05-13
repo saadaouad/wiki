@@ -24,10 +24,10 @@
     "custom-env": "^2.0.6",
     "drizzle-orm": "^0.45.2",
     "fastify": "^5.8.5",
-    "fastify-type-provider-zod": "^6.1.0",
+    "fastify-type-provider-zod": "4.0.1",
     "jose": "^6.2.3",
     "pg": "^8.20.0",
-    "zod": "^4.4.3"
+    "@repo/schema-validation": "*"
   },
   "devDependencies": {
     "@repo/biome-config": "*",
