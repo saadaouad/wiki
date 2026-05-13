@@ -1,5 +1,5 @@
 import { env as loadEnv } from 'custom-env';
-import { z } from 'zod';
+import { z } from '@repo/schema-validation';
 
 // Determine application stage
 process.env.APP_STAGE = process.env.APP_STAGE || 'dev';

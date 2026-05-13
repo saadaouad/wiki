@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 
 import { login, register } from '@/controllers/auth.ts';
-import { loginSchema, registerSchema } from '@/validators/auth.ts';
+import { loginSchema, registerSchema } from '@repo/schema-validation';
 
 export const authRoutes = async (app: FastifyInstance) => {
   app.post(

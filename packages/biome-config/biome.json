@@ -32,6 +32,7 @@
         "noUnusedVariables": "warn"
       },
       "style": {
+        "noNonNullAssertion": "off",
         "useConst": "error"
       },
       "suspicious": {

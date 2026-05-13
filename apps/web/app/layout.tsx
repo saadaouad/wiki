@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { Toaster } from 'sonner';
 
 import { cn } from '@/utils/cn';
 import { NavBar } from '@/components/index';
@@ -27,6 +28,7 @@ const RootLayout = ({
   return (
     <html lang="en" className={cn('font-sans', geistSans.variable)}>
       <body className={geistMono.variable}>
+        <Toaster position="top-right" richColors />
         <NavBar />
         <main className="container mx-auto">{children}</main>
       </body>
