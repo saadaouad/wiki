@@ -2,10 +2,12 @@ import { z } from 'zod';
 
 const email = z
   .string()
+  .trim()
+  .min(1, 'Email is required')
   .email('Invalid email')
-  .transform((value) => value.toLowerCase());
+  .transform((v) => v.toLowerCase());
 
-const password = z.string().min(6, 'Password is short');
+const password = z.string().min(1, 'Password is required').min(6, 'Password is short');
 
 export const registerSchema = z.object({
   email,

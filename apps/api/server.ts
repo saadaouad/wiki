@@ -4,7 +4,7 @@ import Fastify from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
 import { errorHandler } from '@/middleware/errorHandler.ts';
-import { healthRoute, authRoutes } from '@/routes/index.ts';
+import { authRoutes, healthRoute, userRoutes } from '@/routes/index.ts';
 import { env } from '@/env.ts';
 
 const app = Fastify({
@@ -25,6 +25,10 @@ await app.register(healthRoute);
 
 await app.register(authRoutes, {
   prefix: '/api/auth'
+});
+
+await app.register(userRoutes, {
+  prefix: '/api'
 });
 
 errorHandler(app);

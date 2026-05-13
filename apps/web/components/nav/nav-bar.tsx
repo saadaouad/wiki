@@ -15,12 +15,12 @@ export const NavBar = () => {
           <NavigationMenuList className="flex items-center gap-2">
             <NavigationMenuItem>
               <Button asChild variant="outline">
-                <Link href="/signin">Sign In</Link>
+                <Link href="/auth/signin">Sign In</Link>
               </Button>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Button asChild>
-                <Link href="/signup">Sign Up</Link>
+                <Link href="/auth/signup">Sign Up</Link>
               </Button>
             </NavigationMenuItem>
           </NavigationMenuList>
