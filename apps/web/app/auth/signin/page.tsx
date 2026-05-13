@@ -47,7 +47,6 @@ const SignIn = () => {
 
     localStorage.setItem('token', mutate.token);
     router.push('/');
-    router.refresh();
   });
 
   return (

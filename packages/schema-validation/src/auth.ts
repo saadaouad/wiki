@@ -12,12 +12,17 @@ const password = z.string().min(1, 'Password is required').min(6, 'Password is s
 export const registerSchema = z.object({
   email,
   password,
-  username: z
+  username: z.string().trim().max(50, 'Username must be at most 50 characters'),
+  firstName: z
     .string()
-    .min(1, 'Username is short')
-    .max(50, 'Username must be at most 50 characters'),
-  firstName: z.string().max(50, 'First name must be at most 50 characters').optional(),
-  lastName: z.string().max(50, 'Last name must be at most 50 characters').optional()
+    .trim()
+    .min(1, 'First name is required')
+    .max(50, 'First name must be at most 50 characters'),
+  lastName: z
+    .string()
+    .trim()
+    .min(1, 'Last name is required')
+    .max(50, 'Last name must be at most 50 characters')
 });
 
 export const loginSchema = z.object({
