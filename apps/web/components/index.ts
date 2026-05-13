@@ -17,6 +17,6 @@ export {
   NavigationMenuItem,
   NavigationMenuList
 } from './nav/navigation-menu';
-export { default as WikiArticleViewer } from './wiki/wiki-article-viewer';
-export { WikiCard } from './wiki/wiki-card';
-export { default as WikiEditor } from './wiki/wiki-editor';
+export { default as WikiArticleViewer } from './wiki-article-viewer';
+export { WikiCard } from './wiki-card';
+export { default as WikiEditor } from './wiki-editor';

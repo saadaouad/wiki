@@ -5,7 +5,7 @@ import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Upload, X } from 'lucide-react';
 
-import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from '../index';
+import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from '@/components/index';
 import type { WikiEditorFormErrors, WikiEditorFormPayload, WikiEditorProps } from '@/types/wiki';
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
