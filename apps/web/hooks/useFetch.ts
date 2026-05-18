@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const useFetch = <TData = unknown>(endpoint: string, token: string) => {
+export const useFetch = <TData = unknown>(endpoint: string, token?: string) => {
   const [data, setData] = useState<TData | null>(null);
   const [loading, setLoading] = useState(true);
 

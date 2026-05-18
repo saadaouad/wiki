@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "test:unit": "vitest run --config ../../packages/vite-config/vitest.config.ts --project web-unit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -1,14 +1,8 @@
 'use client';
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode
-} from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
+import Loading from '@/components/loading';
 import { useFetch } from '@/hooks/useFetch';
 import type { AuthContextType, MeResponse } from '@/types/user';
 
@@ -37,6 +31,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const user = data?.user ?? null;
   const loading = !hydrated || (!!token && fetchLoading);
   const isAuthenticated = !!user;
+
+  if (loading) return <Loading />;
 
   return (
     <AuthContext.Provider value={{ user, loading, isAuthenticated, setSessionToken }}>

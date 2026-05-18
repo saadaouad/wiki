@@ -20,3 +20,4 @@ export {
 export { default as WikiArticleViewer } from './wiki-article-viewer';
 export { WikiCard } from './wiki-card';
 export { default as WikiEditor } from './wiki-editor';
+export { default as Loading } from './loading';

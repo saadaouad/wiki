@@ -1,20 +1,24 @@
 'use client';
 
-import type React from 'react';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Upload, X } from 'lucide-react';
 
-import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from '@/components/index';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+  Label,
+  Loading
+} from '@/components/index';
 import type { WikiEditorFormErrors, WikiEditorFormPayload, WikiEditorProps } from '@/types/wiki';
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
-  loading: () => (
-    <div className="flex min-h-[220px] items-center justify-center rounded-md border bg-muted/30 text-sm text-muted-foreground">
-      Loading editor…
-    </div>
-  )
+  loading: () => <Loading />
 });
 
 const WikiEditor = ({
