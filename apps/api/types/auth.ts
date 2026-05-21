@@ -1,4 +1,4 @@
-import type { FastifyRequest } from 'fastify';
+import type { FastifyRequest, RouteGenericInterface } from 'fastify';
 import type { JWTPayload } from 'jose';
 
 export type JwtPayload = JWTPayload & {
@@ -6,9 +6,9 @@ export type JwtPayload = JWTPayload & {
   email: string;
 };
 
-export type AuthenticatedRequest = FastifyRequest & {
-  user?: JwtPayload;
-};
+export type AuthenticatedRequest<
+  RouteGeneric extends RouteGenericInterface = RouteGenericInterface
+> = FastifyRequest<RouteGeneric>;
 
 export type RegisterBody = {
   email: string;

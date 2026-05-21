@@ -1,10 +1,10 @@
-import type { FastifyReply } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import type { AuthenticatedRequest } from '@/types/auth.ts';
+import type { JwtPayload } from '@/types/auth.ts';
 import { verifyToken } from '@/utils/index.ts';
 
-export const authenticateToken = async (
-  request: AuthenticatedRequest,
+export const requireAuthenticateToken = async (
+  request: FastifyRequest,
   reply: FastifyReply
 ): Promise<void> => {
   try {
@@ -16,7 +16,7 @@ export const authenticateToken = async (
     }
 
     const payload = await verifyToken(token);
-    request.user = payload;
+    request.user = payload as JwtPayload;
   } catch (err) {
     console.error('Authentication error', err);
     return reply.status(403).send({ error: 'Invalid or expired token' });

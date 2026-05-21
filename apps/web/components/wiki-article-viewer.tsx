@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { Calendar, ChevronRight, Edit, Home, Trash, User } from 'lucide-react';
 
 import { Badge, Button, Card, CardContent, Loading } from '@/components/index';
+import { formatDate } from '@/utils/formatDate';
 import type { WikiArticleViewerProps } from '@/types/wiki';
 
 const ReactMarkdown = dynamic(() => import('react-markdown'), {
@@ -13,15 +14,6 @@ const ReactMarkdown = dynamic(() => import('react-markdown'), {
 });
 
 const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps) => {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <nav className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
@@ -38,7 +30,9 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center">
               <User className="h-4 w-4 mr-1" />
-              <span>By {article.author ?? 'Unknown'}</span>
+              <span>
+                By {article.author.firstName} {article.author.lastName}
+              </span>
             </div>
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-1" />
@@ -51,7 +45,7 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
         </div>
         {canEdit && (
           <div className="ml-4 flex items-center gap-2">
-            <Link href={`/wiki/edit/${article.id}`} className="cursor-pointer">
+            <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
               <Button variant="outline" className="cursor-pointer">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit Article
@@ -158,7 +152,7 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
         </Link>
         {canEdit && (
           <div className="flex items-center gap-2">
-            <Link href={`/wiki/edit/${article.id}`} className="cursor-pointer">
+            <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
               <Button className="cursor-pointer">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit This Article

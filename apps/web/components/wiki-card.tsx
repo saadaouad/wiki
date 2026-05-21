@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Calendar, User } from 'lucide-react';
 
 import {
   Card,
@@ -8,21 +9,27 @@ import {
   CardContent,
   CardFooter
 } from '@/components/index';
+import { formatDate } from '@/utils/formatDate';
 import type { WikiCardProps } from '@/types/wiki';
 
 export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) => {
   return (
     <Card>
-      <CardHeader className="pb-2">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>{author}</span>
-          <span>•</span>
-          <span>{date}</span>
+      <CardHeader className="pb-2 pt-1">
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex items-center">
+            <User className="h-4 w-4 mr-1" />
+            <span>By {author}</span>
+          </div>
+          <div className="flex items-center">
+            <Calendar className="h-4 w-4 mr-1" />
+            <span>{formatDate(date)}</span>
+          </div>
         </div>
-        <CardTitle className="text-lg">{title}</CardTitle>
+        <CardTitle className="text-lg mt-1">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="py-0 h-20">
-        <CardDescription>{summary}</CardDescription>
+      <CardContent className="py-0 h-24">
+        <CardDescription>{summary.slice(0, 200)}...</CardDescription>
       </CardContent>
       <CardFooter className="pt-2">
         <Link href={href} className="text-blue-600 hover:underline text-sm font-medium w-fit">

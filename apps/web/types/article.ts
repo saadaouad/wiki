@@ -1,8 +1,11 @@
+import type { User } from './user';
+
 export interface Article {
-  title: string;
-  author: string | null;
   id: number;
+  title: string;
+  slug: string;
   content: string;
   createdAt: string;
   imageUrl?: string | null;
+  author: User;
 }

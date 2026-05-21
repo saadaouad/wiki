@@ -34,6 +34,6 @@ export type WikiArticleViewerProps = {
 
 export type PageProps = {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 };
