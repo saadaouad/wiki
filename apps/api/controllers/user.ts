@@ -1,12 +1,11 @@
 import { eq } from 'drizzle-orm';
-import type { FastifyReply } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
 import { db } from '@/db/connection.ts';
 import { users } from '@/db/schema.ts';
-import type { AuthenticatedRequest } from '@/types/auth.ts';
 import { generateToken } from '@/utils/index.ts';
 
-export const me = async (request: AuthenticatedRequest, reply: FastifyReply) => {
+export const me = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
     const user = await db.query.users.findFirst({
       where: eq(users.id, request.user!.id)

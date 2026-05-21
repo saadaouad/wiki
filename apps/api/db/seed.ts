@@ -1,16 +1,24 @@
-import { mockUser } from '@/mocks/seed.mock.ts';
+import { mockUser, mockArticle } from '@/mocks/seed.mock.ts';
 import { db } from './connection.ts';
-import { users } from './schema.ts';
+import { users, articles } from './schema.ts';
 
 const seed = async () => {
   console.log('Starting database seed...');
 
   try {
     console.log('Clearing existing data...');
+    await db.delete(articles);
     await db.delete(users);
 
     console.log('Creating demo users...');
     const [demoUser] = await db.insert(users).values(mockUser).returning();
+    if (!demoUser) throw new Error('Failed to create demo user');
+
+    console.log('Creating demo article...');
+    await db
+      .insert(articles)
+      .values({ ...mockArticle, authorId: demoUser.id })
+      .returning();
 
     console.log('DB seeded successfully');
   } catch (e) {

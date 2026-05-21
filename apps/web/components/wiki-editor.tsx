@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Upload, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 import {
   Button,
@@ -85,9 +86,7 @@ const WikiEditor = ({
 
     setIsSubmitting(false);
 
-    alert(
-      `Article ${isEditing ? 'updated' : 'created'} successfully! Check console for form data.`
-    );
+    toast.success(`Article ${isEditing ? 'updated' : 'created'} successfully!`);
   };
 
   const handleCancel = () => {
@@ -106,7 +105,7 @@ const WikiEditor = ({
       <div className="mb-8">
         <h1 className="text-3xl font-bold">{pageTitle}</h1>
         {isEditing && articleId && (
-          <p className="text-muted-foreground mt-2">Editing article ID: {articleId}</p>
+          <p className="text-muted-foreground mt-2">Editing article: {title}</p>
         )}
       </div>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -147,6 +146,7 @@ const WikiEditor = ({
                     placeholder: 'Write your article content in Markdown...',
                     style: { fontSize: 14, lineHeight: 1.5 }
                   }}
+                  height={500}
                 />
               </div>
               {errors.content && <p className="text-sm text-destructive">{errors.content}</p>}
