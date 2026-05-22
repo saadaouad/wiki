@@ -102,7 +102,7 @@ function SignInForm() {
             )}
           </CardContent>
           <CardFooter className="mt-6">
-            <Button type="submit" disabled={loading} className="w-full py-5">
+            <Button type="submit" disabled={loading} className="w-full py-5 cursor-pointer">
               {loading ? 'Signing in…' : 'Sign in'}
             </Button>
           </CardFooter>

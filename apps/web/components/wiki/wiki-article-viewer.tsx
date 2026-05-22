@@ -1,19 +1,25 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { Calendar, ChevronRight, Edit, Home, Trash, User } from 'lucide-react';
+import { Calendar, ChevronRight, Edit, Home, User } from 'lucide-react';
 
-import { Badge, Button, Card, CardContent, Loading } from '@/components/index';
+import {
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  Loading,
+  RequireAuthorization,
+  DeleteArticle
+} from '@/components/index';
 import { formatDate } from '@/utils/formatDate';
-import type { WikiArticleViewerProps } from '@/types/wiki';
+import type { WikiArticleViewerProps } from '@/types/index';
 
 const ReactMarkdown = dynamic(() => import('react-markdown'), {
   loading: () => <Loading />
 });
 
-const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps) => {
+const WikiArticleViewer = ({ article, authorId }: WikiArticleViewerProps) => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <nav className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
@@ -43,7 +49,7 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
             </div>
           </div>
         </div>
-        {canEdit && (
+        <RequireAuthorization authorId={authorId}>
           <div className="ml-4 flex items-center gap-2">
             <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
               <Button variant="outline" className="cursor-pointer">
@@ -51,15 +57,9 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
                 Edit Article
               </Button>
             </Link>
-            <form action={() => {}}>
-              <input type="hidden" name="id" value={String(article.id)} />
-              <Button type="submit" variant="destructive" className="ml-2 cursor-pointer">
-                <Trash className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </form>
+            <DeleteArticle articleId={article.id} />
           </div>
-        )}
+        </RequireAuthorization>
       </div>
       <Card>
         <CardContent className="pt-6">
@@ -148,9 +148,11 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
       </Card>
       <div className="mt-8 flex justify-between items-center">
         <Link href="/">
-          <Button variant="outline">← Back to Articles</Button>
+          <Button variant="outline" className="cursor-pointer">
+            ← Back to Articles
+          </Button>
         </Link>
-        {canEdit && (
+        <RequireAuthorization authorId={authorId}>
           <div className="flex items-center gap-2">
             <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
               <Button className="cursor-pointer">
@@ -158,15 +160,9 @@ const WikiArticleViewer = ({ article, canEdit = false }: WikiArticleViewerProps)
                 Edit This Article
               </Button>
             </Link>
-            <form action={() => {}}>
-              <input type="hidden" name="id" value={String(article.id)} />
-              <Button type="submit" variant="destructive" className="cursor-pointer">
-                <Trash className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </form>
+            <DeleteArticle articleId={article.id} />
           </div>
-        )}
+        </RequireAuthorization>
       </div>
     </div>
   );

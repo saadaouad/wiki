@@ -1,20 +1,21 @@
-import { WikiEditor } from '@/components/index';
-import type { PageProps } from '@/types/wiki';
+import { RequireAuthentication, WikiEditor } from '@/components/index';
+import type { PageProps } from '@/types/index';
 
-const EditArticlePage = async ({ params }: PageProps) => {
+export default async function EditArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const articleDetails = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}`);
   const articleDetailsData = await articleDetails.json();
   const { id, title, content } = articleDetailsData.article;
 
   return (
-    <WikiEditor
-      initialTitle={slug !== 'new' ? title : ''}
-      initialContent={slug !== 'new' ? content : ''}
-      isEditing={true}
-      articleId={id}
-    />
+    <RequireAuthentication>
+      <WikiEditor
+        initialTitle={title}
+        initialContent={content}
+        isEditing={true}
+        articleId={String(id)}
+        articleSlug={slug}
+      />
+    </RequireAuthentication>
   );
-};
-
-export default EditArticlePage;
+}

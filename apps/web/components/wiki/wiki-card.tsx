@@ -10,7 +10,7 @@ import {
   CardFooter
 } from '@/components/index';
 import { formatDate } from '@/utils/formatDate';
-import type { WikiCardProps } from '@/types/wiki';
+import type { WikiCardProps } from '@/types/index';
 
 export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) => {
   return (

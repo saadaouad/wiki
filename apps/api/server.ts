@@ -18,7 +18,8 @@ app.setSerializerCompiler(serializerCompiler);
 await app.register(helmet);
 await app.register(cors, {
   origin: env.CORS_ORIGIN,
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'HEAD', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS']
 });
 
 await app.register(healthRoute);
