@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Upload, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
 
 import { useMutation } from '@/hooks/useMutation';
 import {
@@ -232,7 +232,7 @@ const WikiEditor = ({
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => router.push(`/wiki/${articleSlug}`)}>
+                    <AlertDialogAction onClick={() => redirect(`/wiki/${articleSlug}`)}>
                       Continue
                     </AlertDialogAction>
                   </AlertDialogFooter>

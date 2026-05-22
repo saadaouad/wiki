@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 
 import { Button } from '../ui/button';
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from './navigation-menu';
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from '../ui/navigation-menu';
 import { useAuth } from '@/providers/auth';
 
 export const NavBar = () => {
