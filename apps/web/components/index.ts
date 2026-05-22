@@ -16,7 +16,7 @@ export {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList
-} from './nav/navigation-menu';
+} from './ui/navigation-menu';
 export { NewArticle } from './nav/new-article';
 export { default as WikiArticleViewer } from './wiki/wiki-article-viewer';
 export { WikiCard } from './wiki/wiki-card';
