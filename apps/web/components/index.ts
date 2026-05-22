@@ -17,7 +17,22 @@ export {
   NavigationMenuItem,
   NavigationMenuList
 } from './nav/navigation-menu';
-export { default as WikiArticleViewer } from './wiki-article-viewer';
-export { WikiCard } from './wiki-card';
-export { default as WikiEditor } from './wiki-editor';
+export { NewArticle } from './nav/new-article';
+export { default as WikiArticleViewer } from './wiki/wiki-article-viewer';
+export { WikiCard } from './wiki/wiki-card';
+export { default as WikiEditor } from './wiki/wiki-editor';
+export { DeleteArticle } from './wiki/delete-article';
 export { default as Loading } from './loading';
+export { RequireAuthentication } from './guards/require-authentication';
+export { RequireAuthorization } from './guards/require-authorization';
+export {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel
+} from './ui/alert-dialog';

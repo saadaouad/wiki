@@ -13,8 +13,8 @@ export const NavBar = () => {
   const { user, isAuthenticated, setSessionToken } = useAuth();
 
   const handleSignOut = () => {
-    setSessionToken(null);
     router.push('/');
+    setSessionToken(null);
   };
 
   return (
@@ -32,7 +32,12 @@ export const NavBar = () => {
                 {user?.firstName} {user?.lastName}
               </span>
               <NavigationMenuItem>
-                <Button variant="outline" type="button" onClick={handleSignOut}>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={handleSignOut}
+                  className="cursor-pointer"
+                >
                   <LogOut /> Sign out
                 </Button>
               </NavigationMenuItem>

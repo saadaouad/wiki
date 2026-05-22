@@ -1,14 +1,12 @@
 import { WikiArticleViewer } from '@/components/index';
-import type { PageProps } from '@/types/wiki';
+import type { PageProps } from '@/types/index';
 
 const ViewArticlePage = async ({ params }: PageProps) => {
   const { slug } = await params;
   const articleDetails = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}`);
-  const articleDetailsData = await articleDetails.json();
+  const { article } = await articleDetails.json();
 
-  const canEdit = true;
-
-  return <WikiArticleViewer article={articleDetailsData.article} canEdit={canEdit} />;
+  return <WikiArticleViewer article={article} authorId={article.author.id} />;
 };
 
 export default ViewArticlePage;

@@ -18,19 +18,6 @@ const withAuthor = {
   }
 } as const;
 
-export const getArticles = async (request: FastifyRequest, reply: FastifyReply) => {
-  try {
-    const articlesList = await db.query.articles.findMany({
-      columns: articleColumns,
-      with: withAuthor
-    });
-    return reply.status(200).send({ articles: articlesList });
-  } catch (error) {
-    request.log.error(error);
-    return reply.status(500).send({ error: 'Failed to get articles' });
-  }
-};
-
 async function loadArticleResponseBySlug(slug: string) {
   return db.query.articles.findFirst({
     columns: articleColumns,
@@ -81,6 +68,19 @@ async function allocateUniqueSlug(base: string): Promise<string> {
 
   throw new Error('Could not allocate a unique slug');
 }
+
+export const getArticles = async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const articlesList = await db.query.articles.findMany({
+      columns: articleColumns,
+      with: withAuthor
+    });
+    return reply.status(200).send({ articles: articlesList });
+  } catch (error) {
+    request.log.error(error);
+    return reply.status(500).send({ error: 'Failed to get articles' });
+  }
+};
 
 export const getArticle = async (
   request: FastifyRequest<{ Params: { slug: string } }>,
@@ -144,7 +144,7 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
 
     await db
       .update(articles)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({ ...updates, slug: slugify(updates.title), updatedAt: new Date() })
       .where(eq(articles.id, id));
 
     const article = await loadArticleResponseById(id);

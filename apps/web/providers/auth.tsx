@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 
 import Loading from '@/components/loading';
 import { useFetch } from '@/hooks/useFetch';
-import type { AuthContextType, MeResponse } from '@/types/user';
+import type { AuthContextType, MeResponse } from '@/types/index';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   if (loading) return <Loading />;
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAuthenticated, setSessionToken }}>
+    <AuthContext.Provider value={{ user, loading, isAuthenticated, setSessionToken, token }}>
       {children}
     </AuthContext.Provider>
   );

@@ -136,7 +136,7 @@ function SignUpForm() {
             )}
           </CardContent>
           <CardFooter className="mt-6">
-            <Button type="submit" disabled={loading} className="w-full py-5">
+            <Button type="submit" disabled={loading} className="w-full py-5 cursor-pointer">
               {loading ? 'Creating account…' : 'Sign up'}
             </Button>
           </CardFooter>

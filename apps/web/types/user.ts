@@ -10,10 +10,3 @@ export type MeResponse = {
   user: User;
   token: string;
 };
-
-export type AuthContextType = {
-  user: User | null;
-  loading: boolean;
-  isAuthenticated: boolean;
-  setSessionToken: (token: string | null) => void;
-};

@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Upload, X } from 'lucide-react';
-import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
+import { useMutation } from '@/hooks/useMutation';
 import {
   Button,
   Card,
@@ -13,9 +14,18 @@ import {
   CardTitle,
   Input,
   Label,
-  Loading
+  Loading,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
 } from '@/components/index';
-import type { WikiEditorFormErrors, WikiEditorFormPayload, WikiEditorProps } from '@/types/wiki';
+import type { WikiEditorFormErrors, WikiEditorProps, WikiEditorFormResponse } from '@/types/index';
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
@@ -26,13 +36,15 @@ const WikiEditor = ({
   initialTitle = '',
   initialContent = '',
   isEditing = false,
-  articleId
+  articleId,
+  articleSlug
 }: WikiEditorProps) => {
+  const { mutation, loading } = useMutation<WikiEditorFormResponse>();
+  const router = useRouter();
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
   const [files, setFiles] = useState<File[]>([]);
   const [errors, setErrors] = useState<WikiEditorFormErrors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: WikiEditorFormErrors = {};
@@ -68,34 +80,22 @@ const WikiEditor = ({
       return;
     }
 
-    setIsSubmitting(true);
-
-    const formData: WikiEditorFormPayload = {
-      title: title.trim(),
-      content: content.trim(),
-      files
-    };
-
-    console.log('Form submitted:', {
-      action: isEditing ? 'edit' : 'create',
-      articleId: isEditing ? articleId : undefined,
-      data: formData
+    const mutate = await mutation({
+      endpoint: isEditing ? `/articles/${articleId}` : '/articles',
+      method: isEditing ? 'PATCH' : 'POST',
+      body: {
+        title: title.trim(),
+        content: content.trim(),
+        files
+      },
+      successMessage: `Article ${isEditing ? 'updated' : 'created'} successfully!`,
+      isProtected: true
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (mutate.error) return;
+    if (!mutate.article) return;
 
-    setIsSubmitting(false);
-
-    toast.success(`Article ${isEditing ? 'updated' : 'created'} successfully!`);
-  };
-
-  const handleCancel = () => {
-    const shouldLeave = window.confirm(
-      'Are you sure you want to cancel? Any unsaved changes will be lost.'
-    );
-    if (shouldLeave) {
-      console.log('User cancelled editing');
-    }
+    router.push(`/wiki/${mutate.article.slug}`);
   };
 
   const pageTitle = isEditing ? 'Edit Article' : 'Create New Article';
@@ -212,16 +212,34 @@ const WikiEditor = ({
         <Card>
           <CardContent className="pt-6">
             <div className="flex justify-end space-x-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCancel}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isSubmitting} className="min-w-[100px]">
-                {isSubmitting ? 'Saving...' : 'Save Article'}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={loading}
+                    className="cursor-pointer"
+                  >
+                    Cancel
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure you want to cancel?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Any unsaved changes will be lost.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => router.push(`/wiki/${articleSlug}`)}>
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <Button type="submit" disabled={loading} className="min-w-[100px] cursor-pointer">
+                {loading ? 'Saving...' : 'Save Article'}
               </Button>
             </div>
           </CardContent>
