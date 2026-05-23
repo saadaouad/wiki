@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Toaster } from 'sonner';
 
-import { AuthProvider } from '@/providers/auth';
+import { AuthProvider } from '@/providers/authentication';
 import { cn } from '@/utils/cn';
 import { NavBar } from '@/components/index';
 import './globals.css';

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/index';
 import { Plus } from 'lucide-react';
 
-import { useAuth } from '@/providers/auth';
+import { useAuth } from '@/providers/authentication';
 
 export const NewArticle = () => {
   const { isAuthenticated } = useAuth();

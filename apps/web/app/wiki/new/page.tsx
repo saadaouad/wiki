@@ -1,11 +1,7 @@
-import { RequireAuthentication, WikiEditor } from '@/components/index';
+import { WikiEditor } from '@/components/index';
 
 const NewArticlePage = () => {
-  return (
-    <RequireAuthentication>
-      <WikiEditor isEditing={false} />
-    </RequireAuthentication>
-  );
+  return <WikiEditor />;
 };
 
 export default NewArticlePage;

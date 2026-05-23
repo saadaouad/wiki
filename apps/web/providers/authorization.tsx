@@ -2,9 +2,9 @@
 
 import type { ReactNode } from 'react';
 
-import { useAuth } from '@/providers/auth';
+import { useAuth } from '@/providers/authentication';
 
-export const RequireAuthorization = ({
+export const AuthorizationProvider = ({
   authorId,
   children
 }: {

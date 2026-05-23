@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { loginSchema, type z } from '@repo/schema-validation';
 
@@ -18,7 +18,7 @@ import {
   Label
 } from '@/components/index';
 import { useMutation } from '@/hooks/useMutation';
-import { useAuth } from '@/providers/auth';
+import { useAuth } from '@/providers/authentication';
 
 type SignInValues = z.input<typeof loginSchema>;
 
@@ -26,7 +26,7 @@ type LoginResponse = { token?: string; error?: string };
 
 function SignInForm() {
   const router = useRouter();
-  const { setSessionToken } = useAuth();
+  const { setSessionToken, isAuthenticated, loading: authLoading } = useAuth();
   const { mutation, loading } = useMutation<LoginResponse>();
   const {
     register,
@@ -36,6 +36,8 @@ function SignInForm() {
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' }
   });
+
+  if (isAuthenticated && !authLoading) return redirect('/');
 
   const onSubmit = handleSubmit(async (values) => {
     const mutate = await mutation({
