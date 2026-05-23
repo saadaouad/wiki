@@ -6,7 +6,7 @@ import { LogOut } from 'lucide-react';
 
 import { Button } from '../ui/button';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from '../ui/navigation-menu';
-import { useAuth } from '@/providers/auth';
+import { useAuth } from '@/providers/authentication';
 
 export const NavBar = () => {
   const router = useRouter();

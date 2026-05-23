@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
 import { registerSchema, type z } from '@repo/schema-validation';
@@ -19,7 +19,7 @@ import {
   Label
 } from '@/components/index';
 import { useMutation } from '@/hooks/useMutation';
-import { useAuth } from '@/providers/auth';
+import { useAuth } from '@/providers/authentication';
 
 type SignUpValues = z.input<typeof registerSchema>;
 
@@ -27,7 +27,7 @@ type RegisterResponse = { token?: string; error?: string };
 
 function SignUpForm() {
   const router = useRouter();
-  const { setSessionToken } = useAuth();
+  const { setSessionToken, isAuthenticated, loading: authLoading } = useAuth();
   const { mutation, loading } = useMutation<RegisterResponse>();
   const {
     register,
@@ -37,6 +37,8 @@ function SignUpForm() {
     resolver: zodResolver(registerSchema),
     defaultValues: { email: '', password: '', firstName: '', lastName: '' }
   });
+
+  if (isAuthenticated && !authLoading) return redirect('/');
 
   const onSubmit = handleSubmit(async (values) => {
     const mutate = await mutation({

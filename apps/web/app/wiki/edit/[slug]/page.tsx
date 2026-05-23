@@ -1,4 +1,4 @@
-import { RequireAuthentication, WikiEditor } from '@/components/index';
+import { WikiEditor } from '@/components/index';
 import type { PageProps } from '@/types/index';
 
 export default async function EditArticlePage({ params }: PageProps) {
@@ -8,14 +8,12 @@ export default async function EditArticlePage({ params }: PageProps) {
   const { id, title, content } = articleDetailsData.article;
 
   return (
-    <RequireAuthentication>
-      <WikiEditor
-        initialTitle={title}
-        initialContent={content}
-        isEditing={true}
-        articleId={String(id)}
-        articleSlug={slug}
-      />
-    </RequireAuthentication>
+    <WikiEditor
+      initialTitle={title}
+      initialContent={content}
+      isEditing={true}
+      articleId={String(id)}
+      articleSlug={slug}
+    />
   );
 }

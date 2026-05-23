@@ -3,15 +3,8 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { Calendar, ChevronRight, Edit, Home, User } from 'lucide-react';
 
-import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  Loading,
-  RequireAuthorization,
-  DeleteArticle
-} from '@/components/index';
+import { AuthorizationProvider } from '@/providers/authorization';
+import { Badge, Button, Card, CardContent, Loading, DeleteArticle } from '@/components/index';
 import { formatDate } from '@/utils/formatDate';
 import type { WikiArticleViewerProps } from '@/types/index';
 
@@ -49,7 +42,7 @@ const WikiArticleViewer = ({ article, authorId }: WikiArticleViewerProps) => {
             </div>
           </div>
         </div>
-        <RequireAuthorization authorId={authorId}>
+        <AuthorizationProvider authorId={authorId}>
           <div className="ml-4 flex items-center gap-2">
             <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
               <Button variant="outline" className="cursor-pointer">
@@ -59,7 +52,7 @@ const WikiArticleViewer = ({ article, authorId }: WikiArticleViewerProps) => {
             </Link>
             <DeleteArticle articleId={article.id} />
           </div>
-        </RequireAuthorization>
+        </AuthorizationProvider>
       </div>
       <Card>
         <CardContent className="pt-6">
@@ -152,7 +145,7 @@ const WikiArticleViewer = ({ article, authorId }: WikiArticleViewerProps) => {
             ← Back to Articles
           </Button>
         </Link>
-        <RequireAuthorization authorId={authorId}>
+        <AuthorizationProvider authorId={authorId}>
           <div className="flex items-center gap-2">
             <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
               <Button className="cursor-pointer">
@@ -162,7 +155,7 @@ const WikiArticleViewer = ({ article, authorId }: WikiArticleViewerProps) => {
             </Link>
             <DeleteArticle articleId={article.id} />
           </div>
-        </RequireAuthorization>
+        </AuthorizationProvider>
       </div>
     </div>
   );

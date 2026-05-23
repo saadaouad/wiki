@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { useAuth } from '@/providers/auth';
+import { useAuth } from '@/providers/authentication';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
