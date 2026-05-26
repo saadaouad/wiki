@@ -30,6 +30,7 @@ export type WikiEditorProps = {
   isEditing?: boolean;
   articleId?: string;
   articleSlug?: string;
+  authorId?: string;
 };
 
 export type WikiEditorFormErrors = {

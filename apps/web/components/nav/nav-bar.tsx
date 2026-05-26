@@ -13,7 +13,7 @@ export const NavBar = () => {
   const { user, isAuthenticated, setSessionToken } = useAuth();
 
   const handleSignOut = () => {
-    router.push('/');
+    router.push('/auth/signin');
     setSessionToken(null);
   };
 

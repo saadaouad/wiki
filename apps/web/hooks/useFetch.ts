@@ -1,41 +1,31 @@
-import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import { toast } from 'sonner';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const useFetch = <TData = unknown>(endpoint: string, token?: string) => {
-  const [data, setData] = useState<TData | null>(null);
-  const [loading, setLoading] = useState(true);
+async function fetcher<T>([url, token]: readonly [string, string]): Promise<T> {
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json', Authorization: `Bearer ${token}` }
+  });
+  const json = (await res.json()) as T;
 
-  useEffect(() => {
-    if (!token) {
-      setData(null);
-      setLoading(false);
-      return;
-    }
+  if (!res.ok) {
+    const msg = (json as { error?: string }).error;
+    if (msg) toast.error(msg);
+    throw new Error(msg ?? 'Request failed');
+  }
+  return json;
+}
 
-    setLoading(true);
-    fetch(`${API_URL}${endpoint}`, {
-      headers: {
-        Accept: 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {})
-      }
-    })
-      .then(async (res) => {
-        const json = (await res.json()) as TData;
-        if (!res.ok) {
-          const message = (json as { error?: string }).error;
-          if (message) {
-            toast.error(message);
-          }
-          setData(null);
-        } else {
-          setData(json);
-        }
-      })
-      .catch(() => setData(null))
-      .finally(() => setLoading(false));
-  }, [endpoint, token]);
+export function useFetch<TData = unknown>(endpoint: string, token?: string) {
+  const key = token ? ([`${API_URL}${endpoint}`, token] as const) : null;
 
-  return { data, loading };
-};
+  const { data, error, isLoading } = useSWR<TData>(key, fetcher, {
+    shouldRetryOnError: false
+  });
+
+  return {
+    data: error ? null : (data ?? null),
+    loading: Boolean(token) && isLoading
+  };
+}
