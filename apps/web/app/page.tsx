@@ -2,7 +2,9 @@ import { NewArticle, WikiCard } from '@/components/index';
 import type { Article } from '@/types/index';
 
 const Home = async () => {
-  const articles = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles`);
+  const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/articles`;
+  const articles = await fetch(endpoint);
+
   const articlesData = await articles.json();
 
   return (

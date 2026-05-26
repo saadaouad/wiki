@@ -3,7 +3,6 @@ import type { User, MeResponse } from './user';
 import type {
   PageProps,
   Article,
-  WikiArticleViewerProps,
   WikiCardProps,
   WikiEditorFormErrors,
   WikiEditorProps,
@@ -17,7 +16,6 @@ export type {
   MeResponse,
   PageProps,
   Article,
-  WikiArticleViewerProps,
   WikiCardProps,
   WikiEditorFormErrors,
   WikiEditorProps,

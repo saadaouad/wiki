@@ -6,13 +6,13 @@ import { Calendar, ChevronRight, Edit, Home, User } from 'lucide-react';
 import { AuthorizationProvider } from '@/providers/authorization';
 import { Badge, Button, Card, CardContent, Loading, DeleteArticle } from '@/components/index';
 import { formatDate } from '@/utils/formatDate';
-import type { WikiArticleViewerProps } from '@/types/index';
+import type { Article } from '@/types/index';
 
 const ReactMarkdown = dynamic(() => import('react-markdown'), {
   loading: () => <Loading />
 });
 
-const WikiArticleViewer = ({ article, authorId }: WikiArticleViewerProps) => {
+const WikiArticleViewer = ({ article }: { article: Article }) => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <nav className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
@@ -42,7 +42,7 @@ const WikiArticleViewer = ({ article, authorId }: WikiArticleViewerProps) => {
             </div>
           </div>
         </div>
-        <AuthorizationProvider authorId={authorId}>
+        <AuthorizationProvider authorId={article.author.id}>
           <div className="ml-4 flex items-center gap-2">
             <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
               <Button variant="outline" className="cursor-pointer">
@@ -145,7 +145,7 @@ const WikiArticleViewer = ({ article, authorId }: WikiArticleViewerProps) => {
             ← Back to Articles
           </Button>
         </Link>
-        <AuthorizationProvider authorId={authorId}>
+        <AuthorizationProvider authorId={article.author.id}>
           <div className="flex items-center gap-2">
             <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
               <Button className="cursor-pointer">

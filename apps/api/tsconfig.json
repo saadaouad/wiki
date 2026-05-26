@@ -5,11 +5,10 @@
     "lib": ["ES2022"],
     "noEmit": true,
     "types": ["node"],
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
     }
   },
   "include": ["**/*.ts", "**/*.d.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "tests"]
 }

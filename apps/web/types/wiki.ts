@@ -43,12 +43,6 @@ export type WikiArticleViewerFormResponse = {
   error?: string;
 };
 
-export type WikiArticleViewerProps = {
-  article: Article;
-  authorId: string;
-  pageviews?: number | null;
-};
-
 export type WikiEditorFormResponse = {
   article?: Article;
   error?: string;

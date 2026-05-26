@@ -36,10 +36,10 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
 const WikiEditor = ({
   initialTitle = '',
   initialContent = '',
-  isEditing = false,
   articleId,
   articleSlug,
-  authorId
+  authorId,
+  isEditing = false
 }: WikiEditorProps) => {
   const { accessDenied } = useWikiEditorAccess({ isEditing, authorId });
   const { mutate, loading } = useMutation<WikiEditorFormResponse>();
