@@ -19,18 +19,18 @@ import { useMutation } from '@/hooks/useMutation';
 import type { WikiArticleViewerFormResponse } from '@/types/index';
 
 export const DeleteArticle = ({ articleId }: { articleId: string }) => {
-  const { mutation, loading } = useMutation<WikiArticleViewerFormResponse>();
+  const { mutate, loading } = useMutation<WikiArticleViewerFormResponse>();
   const router = useRouter();
 
   const handleDeleteArticle = async () => {
-    const mutate = await mutation({
+    const res = await mutate({
       endpoint: `/articles/${articleId}`,
       method: 'DELETE',
       successMessage: 'Article has been deleted successfully!',
       isProtected: true
     });
 
-    if (mutate.error) return;
+    if (res.error) return;
 
     router.push('/');
   };
@@ -51,8 +51,15 @@ export const DeleteArticle = ({ articleId }: { articleId: string }) => {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={handleDeleteArticle} disabled={loading}>
+          <AlertDialogCancel className="cursor-pointer" variant="outline">
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            className="cursor-pointer"
+            variant="destructive"
+            onClick={handleDeleteArticle}
+            disabled={loading}
+          >
             {loading ? 'Deleting...' : 'Delete'}
           </AlertDialogAction>
         </AlertDialogFooter>

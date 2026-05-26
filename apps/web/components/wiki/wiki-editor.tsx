@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { Upload, X } from 'lucide-react';
 import { useRouter, redirect } from 'next/navigation';
 
+import { useWikiEditorAccess } from '@/hooks/useWikiEditorAccess';
 import { useMutation } from '@/hooks/useMutation';
 import {
   Button,
@@ -37,14 +38,18 @@ const WikiEditor = ({
   initialContent = '',
   isEditing = false,
   articleId,
-  articleSlug
+  articleSlug,
+  authorId
 }: WikiEditorProps) => {
-  const { mutation, loading } = useMutation<WikiEditorFormResponse>();
+  const { accessDenied } = useWikiEditorAccess({ isEditing, authorId });
+  const { mutate, loading } = useMutation<WikiEditorFormResponse>();
   const router = useRouter();
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
   const [files, setFiles] = useState<File[]>([]);
   const [errors, setErrors] = useState<WikiEditorFormErrors>({});
+
+  if (accessDenied) return <Loading />;
 
   const validateForm = (): boolean => {
     const newErrors: WikiEditorFormErrors = {};
@@ -80,7 +85,7 @@ const WikiEditor = ({
       return;
     }
 
-    const mutate = await mutation({
+    const res = await mutate({
       endpoint: isEditing ? `/articles/${articleId}` : '/articles',
       method: isEditing ? 'PATCH' : 'POST',
       body: {
@@ -92,10 +97,10 @@ const WikiEditor = ({
       isProtected: true
     });
 
-    if (mutate.error) return;
-    if (!mutate.article) return;
+    if (res.error) return;
+    if (!res.article) return;
 
-    router.push(`/wiki/${mutate.article.slug}`);
+    router.push(`/wiki/${res.article.slug}`);
   };
 
   const pageTitle = isEditing ? 'Edit Article' : 'Create New Article';
@@ -232,7 +237,9 @@ const WikiEditor = ({
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => redirect(`/wiki/${articleSlug}`)}>
+                    <AlertDialogAction
+                      onClick={() => redirect(isEditing ? `/wiki/${articleSlug}` : '/')}
+                    >
                       Continue
                     </AlertDialogAction>
                   </AlertDialogFooter>

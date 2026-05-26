@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useRouter, redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
 import { registerSchema, type z } from '@repo/schema-validation';
@@ -16,9 +16,11 @@ import {
   CardHeader,
   CardTitle,
   Input,
-  Label
+  Label,
+  Loading
 } from '@/components/index';
 import { useMutation } from '@/hooks/useMutation';
+import { useRedirectIfAuthenticated } from '@/hooks/useRedirectIfAuthenticated';
 import { useAuth } from '@/providers/authentication';
 
 type SignUpValues = z.input<typeof registerSchema>;
@@ -27,8 +29,9 @@ type RegisterResponse = { token?: string; error?: string };
 
 function SignUpForm() {
   const router = useRouter();
-  const { setSessionToken, isAuthenticated, loading: authLoading } = useAuth();
-  const { mutation, loading } = useMutation<RegisterResponse>();
+  const { setSessionToken } = useAuth();
+  const { accessDenied } = useRedirectIfAuthenticated();
+  const { mutate, loading } = useMutation<RegisterResponse>();
   const {
     register,
     handleSubmit,
@@ -38,20 +41,20 @@ function SignUpForm() {
     defaultValues: { email: '', password: '', firstName: '', lastName: '' }
   });
 
-  if (isAuthenticated && !authLoading) return redirect('/');
+  if (accessDenied) return <Loading />;
 
   const onSubmit = handleSubmit(async (values) => {
-    const mutate = await mutation({
+    const res = await mutate({
       endpoint: '/auth/register',
       method: 'POST',
       body: values,
       successMessage: 'Account has been created'
     });
 
-    if (mutate.error) return;
-    if (!mutate.token) return;
+    if (res.error) return;
+    if (!res.token) return;
 
-    setSessionToken(mutate.token);
+    setSessionToken(res.token);
     router.push('/');
   });
 

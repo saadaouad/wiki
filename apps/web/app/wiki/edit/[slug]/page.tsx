@@ -5,7 +5,8 @@ export default async function EditArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const articleDetails = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}`);
   const articleDetailsData = await articleDetails.json();
-  const { id, title, content } = articleDetailsData.article;
+  const { id, title, content, author } = articleDetailsData.article;
+  const authorId = author.id;
 
   return (
     <WikiEditor
@@ -14,6 +15,7 @@ export default async function EditArticlePage({ params }: PageProps) {
       isEditing={true}
       articleId={String(id)}
       articleSlug={slug}
+      authorId={authorId}
     />
   );
 }

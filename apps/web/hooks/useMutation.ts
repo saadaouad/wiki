@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useId } from 'react';
+import useSWRMutation from 'swr/mutation';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/providers/authentication';
@@ -7,7 +8,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type MutationMethod = 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-type MutationParams<TBody = unknown> = {
+type ApiMutationInput<TBody = unknown> = {
   endpoint: string;
   method: MutationMethod;
   body?: TBody;
@@ -15,57 +16,46 @@ type MutationParams<TBody = unknown> = {
   isProtected?: boolean;
 };
 
-export const useMutation = <TData = unknown>() => {
-  const [loading, setLoading] = useState(false);
+async function performApiMutation<T>(
+  input: ApiMutationInput<unknown>,
+  token: string | null
+): Promise<T> {
+  const body = input.body !== undefined ? JSON.stringify(input.body) : undefined;
+
+  const res = await fetch(`${API_URL}${input.endpoint}`, {
+    method: input.method,
+    headers: {
+      ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+      ...(input.isProtected && token ? { Authorization: `Bearer ${token}` } : {})
+    },
+    body
+  });
+
+  const raw = await res.text();
+  let data = {} as T;
+  if (raw) {
+    try {
+      data = JSON.parse(raw) as T;
+    } catch {
+      console.error('Failed to parse JSON response:', raw);
+    }
+  }
+
+  if (!res.ok) toast.error((data as { error?: string }).error ?? 'Request failed');
+  else if (input.successMessage) toast.success(input.successMessage);
+
+  return data;
+}
+
+export function useMutation<TData = unknown>() {
   const { token } = useAuth();
 
-  const mutation = async <TBody = unknown>({
-    endpoint,
-    method,
-    body,
-    successMessage,
-    isProtected
-  }: MutationParams<TBody>) => {
-    setLoading(true);
-    try {
-      const headers: HeadersInit = {
-        ...(isProtected && token ? { Authorization: `Bearer ${token}` } : {})
-      };
-      const payload = body !== undefined ? JSON.stringify(body) : undefined;
-      if (payload !== undefined) {
-        Object.assign(headers, { 'Content-Type': 'application/json' });
-      }
+  const { trigger, isMutating } = useSWRMutation<TData, unknown, string, ApiMutationInput<unknown>>(
+    useId(),
+    (_, { arg }) => performApiMutation<TData>(arg, token ?? null)
+  );
 
-      const res = await fetch(`${API_URL}${endpoint}`, {
-        method,
-        headers,
-        body: payload
-      });
+  const mutate = async <B>(params: ApiMutationInput<B>) => ((await trigger(params)) ?? {}) as TData;
 
-      const raw = await res.text();
-
-      let data = {} as TData;
-      try {
-        data = JSON.parse(raw);
-      } catch {
-        // Non-JSON error payload (unexpected from our API).
-      }
-
-      if (!res.ok) {
-        const message = (data as { error: string }).error;
-        toast.error(message);
-      } else if (successMessage) {
-        toast.success(successMessage);
-      }
-
-      return data;
-    } catch (e) {
-      const err = e instanceof Error ? e : new Error(String(e));
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { mutation, loading };
-};
+  return { mutate, loading: isMutating };
+}
