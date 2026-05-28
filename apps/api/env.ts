@@ -2,7 +2,8 @@ import { env as loadEnv } from 'custom-env';
 import { z } from '@repo/schema-validation';
 
 // Determine application stage
-process.env.APP_STAGE = process.env.APP_STAGE || 'dev';
+process.env.APP_STAGE =
+  process.env.APP_STAGE || (process.env.NODE_ENV === 'production' ? 'prod' : 'dev');
 
 const isProduction = process.env.APP_STAGE === 'prod';
 const isDevelopment = process.env.APP_STAGE === 'dev';
@@ -24,7 +25,6 @@ const envSchema = z.object({
 
   // Server configuration
   PORT: z.coerce.number().positive().default(3000),
-  HOST: z.string().default('localhost'),
 
   // Database
   DATABASE_URL: z.string().startsWith('postgresql://'),

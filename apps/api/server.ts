@@ -41,9 +41,11 @@ errorHandler(app);
 const start = async () => {
   try {
     await app.listen({
-      host: env.HOST,
+      host: '0.0.0.0',
       port: env.PORT
     });
+
+    app.log.info(`Server running on port ${env.PORT}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
