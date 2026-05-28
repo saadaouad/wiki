@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "build:api": "turbo run build --filter=api",
+    "build:web": "turbo run build --filter=web",
     "dev": "turbo run dev",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
@@ -19,7 +21,7 @@
     "vitest": "^4.1.6"
   },
   "engines": {
-    "node": ">=22"
+    "node": "22.x"
   },
   "packageManager": "npm@11.13.0",
   "workspaces": [
