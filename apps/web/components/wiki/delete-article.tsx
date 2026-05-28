@@ -32,7 +32,6 @@ export const DeleteArticle = ({ articleId }: { articleId: string }) => {
 
     if (res.error) return;
 
-    router.refresh();
     router.push('/');
   };
 

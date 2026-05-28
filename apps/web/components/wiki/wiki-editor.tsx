@@ -100,7 +100,6 @@ const WikiEditor = ({
     if (res.error) return;
     if (!res.article) return;
 
-    router.refresh();
     router.push(`/wiki/${res.article.slug}`);
   };
 
