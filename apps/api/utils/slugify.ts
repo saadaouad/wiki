@@ -1,6 +1,5 @@
 const MAX_SLUG_LENGTH = 255;
 
-/** e.g. `"Welcome to"` → `"welcome-to"`, trimmed to DB column length. */
 export function slugify(text: string): string {
   let s = text
     .trim()

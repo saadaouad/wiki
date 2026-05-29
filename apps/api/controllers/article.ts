@@ -1,14 +1,10 @@
 import { eq } from 'drizzle-orm';
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import type { z } from 'zod';
 
 import { db } from '@/db/connection.ts';
 import { articles } from '@/db/schema.ts';
-import type { createArticleSchema, updateArticleSchema } from '@repo/schema-validation';
-import { slugify } from '@/utils/index.ts';
-
-type CreateArticleBody = z.infer<typeof createArticleSchema>;
-type UpdateArticleBody = z.infer<typeof updateArticleSchema>;
+import { resolveImageUrl, slugify } from '@/utils/index.ts';
+import type { CreateArticleBody, UpdateArticleBody } from '@repo/schema-validation';
 
 const articleColumns = { authorId: false } as const;
 
@@ -18,23 +14,23 @@ const withAuthor = {
   }
 } as const;
 
-async function loadArticleResponseBySlug(slug: string) {
+const loadArticleResponseBySlug = async (slug: string) => {
   return db.query.articles.findFirst({
     columns: articleColumns,
     where: eq(articles.slug, slug),
     with: withAuthor
   });
-}
+};
 
-async function loadArticleResponseById(id: string) {
+const loadArticleResponseById = async (id: string) => {
   return db.query.articles.findFirst({
     columns: articleColumns,
     where: eq(articles.id, id),
     with: withAuthor
   });
-}
+};
 
-async function allocateUniqueSlug(base: string): Promise<string> {
+const allocateUniqueSlug = async (base: string): Promise<string> => {
   const max = 255;
 
   if (!base) {
@@ -67,7 +63,7 @@ async function allocateUniqueSlug(base: string): Promise<string> {
   }
 
   throw new Error('Could not allocate a unique slug');
-}
+};
 
 export const getArticles = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
@@ -97,21 +93,24 @@ export const getArticle = async (
 
 export const createArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
-  const body = request.body as CreateArticleBody;
-
-  const imageUrl = body.imageUrl === undefined || body.imageUrl === '' ? null : body.imageUrl;
-
-  const baseSlug = slugify(body.title);
+  const {
+    title,
+    content,
+    published = false,
+    imageUrl: bodyImageUrl
+  } = request.body as CreateArticleBody;
+  const imageUrl = await resolveImageUrl(request, bodyImageUrl);
+  const baseSlug = slugify(title);
 
   try {
     const slug = await allocateUniqueSlug(baseSlug);
 
     await db.insert(articles).values({
-      title: body.title,
+      title,
       slug,
-      content: body.content,
+      content,
       imageUrl,
-      published: body.published ?? false,
+      published,
       authorId: userId,
       updatedAt: new Date()
     });
@@ -126,8 +125,12 @@ export const createArticle = async (request: FastifyRequest, reply: FastifyReply
 
 export const updateArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
-  const id = (request.params as { id: string }).id;
-  const { ...updates } = request.body as UpdateArticleBody;
+  const { id } = request.params as { id: string };
+  const updates = { ...(request.body as UpdateArticleBody) };
+
+  if (request.articleImageBuffer || updates.imageUrl !== undefined) {
+    updates.imageUrl = await resolveImageUrl(request, updates.imageUrl);
+  }
 
   try {
     const existing = await db.query.articles.findFirst({
@@ -142,9 +145,11 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
       return reply.status(403).send({ error: 'Forbidden' });
     }
 
+    const slug = updates.title ? await allocateUniqueSlug(slugify(updates.title)) : existing.slug;
+
     await db
       .update(articles)
-      .set({ ...updates, slug: slugify(updates.title), updatedAt: new Date() })
+      .set({ ...updates, slug, updatedAt: new Date() })
       .where(eq(articles.id, id));
 
     const article = await loadArticleResponseById(id);

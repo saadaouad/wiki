@@ -1,6 +1,7 @@
+import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
-import Fastify from 'fastify';
+import multipart from '@fastify/multipart';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
 import { errorHandler } from '@/middleware/errorHandler.ts';
@@ -16,6 +17,7 @@ app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
 await app.register(helmet);
+await app.register(multipart);
 await app.register(cors, {
   origin: env.CORS_ORIGIN,
   credentials: true,
