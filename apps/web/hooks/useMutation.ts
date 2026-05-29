@@ -20,12 +20,16 @@ async function performApiMutation<T>(
   input: ApiMutationInput<unknown>,
   token: string | null
 ): Promise<T> {
-  const body = input.body !== undefined ? JSON.stringify(input.body) : undefined;
+  const isFormData = input.body instanceof FormData;
+  let body: BodyInit | undefined;
+  if (input.body !== undefined && input.body !== null) {
+    body = isFormData ? (input.body as FormData) : JSON.stringify(input.body);
+  }
 
   const res = await fetch(`${API_URL}${input.endpoint}`, {
     method: input.method,
     headers: {
-      ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+      ...(body !== undefined && !isFormData ? { 'Content-Type': 'application/json' } : {}),
       ...(input.isProtected && token ? { Authorization: `Bearer ${token}` } : {})
     },
     body

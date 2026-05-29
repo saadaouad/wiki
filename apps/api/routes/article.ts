@@ -8,11 +8,8 @@ import {
   updateArticle
 } from '@/controllers/article.ts';
 import { requireAuthenticateToken } from '@/middleware/auth.ts';
-import {
-  articleIdParamsSchema,
-  createArticleSchema,
-  updateArticleSchema
-} from '@repo/schema-validation';
+import { parseArticleMultipart, validateUpdateArticleBody } from '@/middleware/articleBody.ts';
+import { articleIdParamsSchema, createArticleSchema } from '@repo/schema-validation';
 
 export const articleRoutes = async (app: FastifyInstance) => {
   app.get('/articles', getArticles);
@@ -20,6 +17,7 @@ export const articleRoutes = async (app: FastifyInstance) => {
   app.post(
     '/articles',
     {
+      preValidation: parseArticleMultipart,
       preHandler: requireAuthenticateToken,
       schema: { body: createArticleSchema }
     },
@@ -28,8 +26,9 @@ export const articleRoutes = async (app: FastifyInstance) => {
   app.patch(
     '/articles/:id',
     {
-      preHandler: requireAuthenticateToken,
-      schema: { body: updateArticleSchema, params: articleIdParamsSchema }
+      preValidation: parseArticleMultipart,
+      preHandler: [requireAuthenticateToken, validateUpdateArticleBody],
+      schema: { params: articleIdParamsSchema }
     },
     updateArticle
   );

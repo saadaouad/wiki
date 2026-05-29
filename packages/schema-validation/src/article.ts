@@ -10,6 +10,7 @@ const content = z.string().min(1, 'Content is required');
 
 const imageUrl = z
   .union([z.string().trim().url(), z.literal('')])
+  .transform((value) => (value === '' ? null : value))
   .nullable()
   .optional();
 
@@ -22,17 +23,21 @@ export const createArticleSchema = z.object({
   published
 });
 
-export const updateArticleSchema = z
-  .object({
-    title,
-    content,
-    imageUrl,
-    published
-  })
-  .refine((body) => Object.values(body).some((v) => v !== undefined), {
-    message: 'At least one field is required to update'
-  });
+export const updateArticleFieldsSchema = z.object({
+  title,
+  content,
+  imageUrl,
+  published
+}).partial();
 
-  export const articleIdParamsSchema = z.object({
-    id: z.string().uuid()
-  });
+export const updateArticleSchema = updateArticleFieldsSchema.refine(
+  (body) => Object.values(body).some((v) => v !== undefined),
+  { message: 'At least one field is required to update' }
+);
+
+export const articleIdParamsSchema = z.object({
+  id: z.string().uuid()
+});
+
+export type CreateArticleBody = z.infer<typeof createArticleSchema>;
+export type UpdateArticleBody = z.infer<typeof updateArticleFieldsSchema>;

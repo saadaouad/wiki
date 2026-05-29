@@ -85,14 +85,17 @@ const WikiEditor = ({
       return;
     }
 
+    const formData = new FormData();
+    formData.append('title', title.trim());
+    formData.append('content', content.trim());
+    if (files[0]) {
+      formData.append('image', files[0]);
+    }
+
     const res = await mutate({
       endpoint: isEditing ? `/articles/${articleId}` : '/articles',
       method: isEditing ? 'PATCH' : 'POST',
-      body: {
-        title: title.trim(),
-        content: content.trim(),
-        files
-      },
+      body: formData,
       successMessage: `Article ${isEditing ? 'updated' : 'created'} successfully!`,
       isProtected: true
     });
@@ -180,6 +183,7 @@ const WikiEditor = ({
                   multiple
                   onChange={handleFileUpload}
                   className="sr-only"
+                  accept="image/*"
                 />
               </div>
               {files.length > 0 && (
@@ -236,8 +240,9 @@ const WikiEditor = ({
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
                     <AlertDialogAction
+                      className="cursor-pointer"
                       onClick={() => redirect(isEditing ? `/wiki/${articleSlug}` : '/')}
                     >
                       Continue
