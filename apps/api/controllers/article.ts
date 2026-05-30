@@ -2,8 +2,9 @@ import { eq } from 'drizzle-orm';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { db } from '@/db/connection.ts';
-import { articles } from '@/db/schema.ts';
+import { Article, articles } from '@/db/schema.ts';
 import { resolveImageUrl, slugify } from '@/utils/index.ts';
+import redis from '@/cache/index.ts';
 import type { CreateArticleBody, UpdateArticleBody } from '@repo/schema-validation';
 
 const articleColumns = { authorId: false } as const;
@@ -66,11 +67,18 @@ const allocateUniqueSlug = async (base: string): Promise<string> => {
 };
 
 export const getArticles = async (request: FastifyRequest, reply: FastifyReply) => {
+  const cacheKey = 'articles';
+
   try {
-    const articlesList = await db.query.articles.findMany({
-      columns: articleColumns,
-      with: withAuthor
-    });
+    let articlesList = await redis.get(cacheKey);
+
+    if (!articlesList) {
+      articlesList = await db.query.articles.findMany({
+        columns: articleColumns,
+        with: withAuthor
+      });
+      await redis.set(cacheKey, articlesList, { ex: 60 });
+    }
     return reply.status(200).send({ articles: articlesList });
   } catch (error) {
     request.log.error(error);
@@ -82,8 +90,15 @@ export const getArticle = async (
   request: FastifyRequest<{ Params: { slug: string } }>,
   reply: FastifyReply
 ) => {
+  const cacheKey = `article:${request.params.slug}`;
+
   try {
-    const article = await loadArticleResponseBySlug(request.params.slug);
+    let article = await redis.get(cacheKey);
+
+    if (!article) {
+      article = await loadArticleResponseBySlug(request.params.slug);
+      await redis.set(cacheKey, article, { ex: 60 });
+    }
     return reply.status(200).send({ article });
   } catch (error) {
     request.log.error(error);
