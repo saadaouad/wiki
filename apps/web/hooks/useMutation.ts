@@ -1,5 +1,4 @@
-import { useId } from 'react';
-import useSWRMutation from 'swr/mutation';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/providers/authentication';
@@ -8,7 +7,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type MutationMethod = 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-type ApiMutationInput<TBody = unknown> = {
+type MutationParams<TBody = unknown> = {
   endpoint: string;
   method: MutationMethod;
   body?: TBody;
@@ -16,50 +15,41 @@ type ApiMutationInput<TBody = unknown> = {
   isProtected?: boolean;
 };
 
-async function performApiMutation<T>(
-  input: ApiMutationInput<unknown>,
-  token: string | null
-): Promise<T> {
-  const isFormData = input.body instanceof FormData;
-  let body: BodyInit | undefined;
-  if (input.body !== undefined && input.body !== null) {
-    body = isFormData ? (input.body as FormData) : JSON.stringify(input.body);
-  }
-
-  const res = await fetch(`${API_URL}${input.endpoint}`, {
-    method: input.method,
-    headers: {
-      ...(body !== undefined && !isFormData ? { 'Content-Type': 'application/json' } : {}),
-      ...(input.isProtected && token ? { Authorization: `Bearer ${token}` } : {})
-    },
-    body
-  });
-
-  const raw = await res.text();
-  let data = {} as T;
-  if (raw) {
-    try {
-      data = JSON.parse(raw) as T;
-    } catch {
-      console.error('Failed to parse JSON response:', raw);
-    }
-  }
-
-  if (!res.ok) toast.error((data as { error?: string }).error ?? 'Request failed');
-  else if (input.successMessage) toast.success(input.successMessage);
-
-  return data;
-}
-
 export function useMutation<TData = unknown>() {
   const { token } = useAuth();
+  const [loading, setLoading] = useState(false);
 
-  const { trigger, isMutating } = useSWRMutation<TData, unknown, string, ApiMutationInput<unknown>>(
-    useId(),
-    (_, { arg }) => performApiMutation<TData>(arg, token ?? null)
-  );
+  const mutate = async (params: MutationParams): Promise<TData> => {
+    const isFormData = params.body instanceof FormData;
+    let body: BodyInit | undefined;
+    if (params.body != null) {
+      body = isFormData ? (params.body as FormData) : JSON.stringify(params.body);
+    }
 
-  const mutate = async <B>(params: ApiMutationInput<B>) => ((await trigger(params)) ?? {}) as TData;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}${params.endpoint}`, {
+        method: params.method,
+        headers: {
+          ...(params.isProtected && token && { Authorization: `Bearer ${token}` }),
+          ...(!isFormData && body != null && { 'Content-Type': 'application/json' })
+        },
+        body
+      });
 
-  return { mutate, loading: isMutating };
+      const data = (await res.json().catch(() => ({}))) as TData;
+
+      if (!res.ok) {
+        toast.error((data as { error?: string }).error ?? 'Request failed');
+      } else if (params.successMessage) {
+        toast.success(params.successMessage);
+      }
+
+      return data;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { mutate, loading };
 }

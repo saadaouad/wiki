@@ -12,10 +12,10 @@ export default async function EditArticlePage({ params }: PageProps) {
 
   return (
     <WikiEditor
-      initialTitle={title}
-      initialContent={content}
       articleId={id}
       articleSlug={slug}
+      initialTitle={title}
+      initialContent={content}
       authorId={authorId}
       isEditing={true}
     />
