@@ -8,6 +8,7 @@ export interface Article {
   createdAt: string;
   imageUrl?: string | null;
   author: User;
+  articleView?: number;
 }
 
 export type WikiCardProps = {

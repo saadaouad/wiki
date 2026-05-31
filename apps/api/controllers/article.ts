@@ -2,8 +2,8 @@ import { eq } from 'drizzle-orm';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { db } from '@/db/connection.ts';
-import { Article, articles } from '@/db/schema.ts';
-import { resolveImageUrl, slugify } from '@/utils/index.ts';
+import { articles } from '@/db/schema.ts';
+import { resolveImageUrl, slugify, pageView } from '@/utils/index.ts';
 import redis from '@/cache/index.ts';
 import type { CreateArticleBody, UpdateArticleBody } from '@repo/schema-validation';
 
@@ -67,18 +67,17 @@ const allocateUniqueSlug = async (base: string): Promise<string> => {
 };
 
 export const getArticles = async (request: FastifyRequest, reply: FastifyReply) => {
-  const cacheKey = 'articles';
-
   try {
-    let articlesList = await redis.get(cacheKey);
+    let articlesList = await redis.get('articles');
 
     if (!articlesList) {
       articlesList = await db.query.articles.findMany({
         columns: articleColumns,
         with: withAuthor
       });
-      await redis.set(cacheKey, articlesList, { ex: 60 });
+      await redis.set('articles', articlesList, { ex: 60 });
     }
+
     return reply.status(200).send({ articles: articlesList });
   } catch (error) {
     request.log.error(error);
@@ -90,16 +89,23 @@ export const getArticle = async (
   request: FastifyRequest<{ Params: { slug: string } }>,
   reply: FastifyReply
 ) => {
-  const cacheKey = `article:${request.params.slug}`;
-
   try {
-    let article = await redis.get(cacheKey);
+    let article = await redis.get(`article:${request.params.slug}`);
 
     if (!article) {
       article = await loadArticleResponseBySlug(request.params.slug);
-      await redis.set(cacheKey, article, { ex: 60 });
+      if (!article) {
+        return reply.status(404).send({ error: 'Article not found' });
+      }
+      await redis.set(`article:${request.params.slug}`, article, { ex: 60 });
     }
-    return reply.status(200).send({ article });
+
+    return reply.status(200).send({
+      article: {
+        ...article,
+        articleView: await pageView(`pageviews:article:${(article as { id: string }).id}`)
+      }
+    });
   } catch (error) {
     request.log.error(error);
     return reply.status(500).send({ error: 'Failed to get article' });
@@ -129,6 +135,8 @@ export const createArticle = async (request: FastifyRequest, reply: FastifyReply
       authorId: userId,
       updatedAt: new Date()
     });
+
+    await redis.del('articles');
 
     const article = await loadArticleResponseBySlug(slug);
     return reply.status(201).send({ article });
@@ -167,6 +175,8 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
       .set({ ...updates, slug, updatedAt: new Date() })
       .where(eq(articles.id, id));
 
+    await redis.del('articles');
+
     const article = await loadArticleResponseById(id);
     return reply.status(200).send({ article });
   } catch (error) {
@@ -193,6 +203,7 @@ export const deleteArticle = async (request: FastifyRequest, reply: FastifyReply
     }
 
     await db.delete(articles).where(eq(articles.id, id));
+    await redis.del('articles');
     return reply.status(204).send();
   } catch (error) {
     request.log.error(error);

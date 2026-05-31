@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { Calendar, ChevronRight, Edit, Home, User } from 'lucide-react';
+import { Calendar, ChevronRight, Edit, Home, User, Eye } from 'lucide-react';
 
 import { AuthorizationProvider } from '@/providers/authorization';
 import { Badge, Button, Card, CardContent, Loading, DeleteArticle } from '@/components/index';
@@ -39,6 +39,11 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
             </div>
             <div className="flex items-center">
               <Badge variant="secondary">Article</Badge>
+              <div className="ml-3 flex items-center text-sm text-muted-foreground">
+                <Eye className="h-4 w-4 mr-1" />
+                <span>{article.articleView ? article.articleView : '—'}</span>
+                <span className="ml-1">views</span>
+              </div>
             </div>
           </div>
         </div>
