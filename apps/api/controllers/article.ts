@@ -3,7 +3,8 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { db } from '@/db/connection.ts';
 import { articles } from '@/db/schema.ts';
-import { resolveImageUrl, slugify } from '@/utils/index.ts';
+import { resolveImageUrl, slugify, pageView } from '@/utils/index.ts';
+import redis from '@/cache/index.ts';
 import type { CreateArticleBody, UpdateArticleBody } from '@repo/schema-validation';
 
 const articleColumns = { authorId: false } as const;
@@ -67,10 +68,16 @@ const allocateUniqueSlug = async (base: string): Promise<string> => {
 
 export const getArticles = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
-    const articlesList = await db.query.articles.findMany({
-      columns: articleColumns,
-      with: withAuthor
-    });
+    let articlesList = await redis.get('articles');
+
+    if (!articlesList) {
+      articlesList = await db.query.articles.findMany({
+        columns: articleColumns,
+        with: withAuthor
+      });
+      await redis.set('articles', articlesList, { ex: 60 });
+    }
+
     return reply.status(200).send({ articles: articlesList });
   } catch (error) {
     request.log.error(error);
@@ -83,8 +90,22 @@ export const getArticle = async (
   reply: FastifyReply
 ) => {
   try {
-    const article = await loadArticleResponseBySlug(request.params.slug);
-    return reply.status(200).send({ article });
+    let article = await redis.get(`article:${request.params.slug}`);
+
+    if (!article) {
+      article = await loadArticleResponseBySlug(request.params.slug);
+      if (!article) {
+        return reply.status(404).send({ error: 'Article not found' });
+      }
+      await redis.set(`article:${request.params.slug}`, article, { ex: 60 });
+    }
+
+    return reply.status(200).send({
+      article: {
+        ...article,
+        articleView: await pageView(`pageviews:article:${(article as { id: string }).id}`)
+      }
+    });
   } catch (error) {
     request.log.error(error);
     return reply.status(500).send({ error: 'Failed to get article' });
@@ -114,6 +135,8 @@ export const createArticle = async (request: FastifyRequest, reply: FastifyReply
       authorId: userId,
       updatedAt: new Date()
     });
+
+    await redis.del('articles');
 
     const article = await loadArticleResponseBySlug(slug);
     return reply.status(201).send({ article });
@@ -152,6 +175,8 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
       .set({ ...updates, slug, updatedAt: new Date() })
       .where(eq(articles.id, id));
 
+    await redis.del('articles');
+
     const article = await loadArticleResponseById(id);
     return reply.status(200).send({ article });
   } catch (error) {
@@ -178,6 +203,7 @@ export const deleteArticle = async (request: FastifyRequest, reply: FastifyReply
     }
 
     await db.delete(articles).where(eq(articles.id, id));
+    await redis.del('articles');
     return reply.status(204).send();
   } catch (error) {
     request.log.error(error);

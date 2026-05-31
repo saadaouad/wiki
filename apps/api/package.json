@@ -24,6 +24,7 @@
     "@fastify/helmet": "^13.0.2",
     "@fastify/multipart": "^10.0.0",
     "@repo/schema-validation": "*",
+    "@upstash/redis": "^1.38.0",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.10.0",
     "custom-env": "^2.0.6",
