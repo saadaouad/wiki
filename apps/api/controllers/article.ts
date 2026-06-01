@@ -4,7 +4,7 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import { db } from '@/db/connection.ts';
 import { articles } from '@/db/schema.ts';
 import { resolveImageUrl, slugify, pageView } from '@/utils/index.ts';
-import redis from '@/cache/index.ts';
+import redis from '@/lib/redis.ts';
 import type { CreateArticleBody, UpdateArticleBody } from '@repo/schema-validation';
 
 const articleColumns = { authorId: false } as const;

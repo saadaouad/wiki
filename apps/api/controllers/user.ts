@@ -4,7 +4,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { db } from '@/db/connection.ts';
 import { users } from '@/db/schema.ts';
 import { generateToken } from '@/utils/index.ts';
-import redis from '@/cache/index.ts';
+import redis from '@/lib/redis.ts';
 import type { User } from '@/types/user.ts';
 
 export const me = async (request: FastifyRequest, reply: FastifyReply) => {
