@@ -17,7 +17,7 @@ const Home = async () => {
             title={article.title}
             author={`${article.author.firstName} ${article.author.lastName}`}
             date={article.createdAt}
-            summary={article.content}
+            summary={article.summary ?? article.content}
             href={`/wiki/${article.slug}`}
           />
         ))}

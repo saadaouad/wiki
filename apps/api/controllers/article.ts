@@ -5,6 +5,7 @@ import { db } from '@/db/connection.ts';
 import { articles } from '@/db/schema.ts';
 import { resolveImageUrl, slugify, pageView } from '@/utils/index.ts';
 import redis from '@/lib/redis.ts';
+import { summarizeArticle } from '@/lib/summarize-article.ts';
 import type { CreateArticleBody, UpdateArticleBody } from '@repo/schema-validation';
 
 const articleColumns = { authorId: false } as const;
@@ -125,11 +126,13 @@ export const createArticle = async (request: FastifyRequest, reply: FastifyReply
 
   try {
     const slug = await allocateUniqueSlug(baseSlug);
+    const summary = await summarizeArticle(title, content);
 
     await db.insert(articles).values({
       title,
       slug,
       content,
+      summary,
       imageUrl,
       published,
       authorId: userId,
@@ -169,14 +172,26 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
     }
 
     const slug = updates.title ? await allocateUniqueSlug(slugify(updates.title)) : existing.slug;
+    const shouldRefreshSummary =
+      updates.content !== undefined || updates.title !== undefined;
 
     await db
       .update(articles)
-      .set({ ...updates, slug, updatedAt: new Date() })
+      .set({
+        ...updates,
+        slug,
+        updatedAt: new Date(),
+        ...(shouldRefreshSummary && {
+          summary: await summarizeArticle(
+            updates.title ?? existing.title,
+            updates.content ?? existing.content
+          )
+        })
+      })
       .where(eq(articles.id, id));
 
     await redis.del('articles');
-
+   
     const article = await loadArticleResponseById(id);
     return reply.status(200).send({ article });
   } catch (error) {
