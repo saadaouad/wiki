@@ -5,8 +5,7 @@ import dynamic from 'next/dynamic';
 import { Upload, X } from 'lucide-react';
 import { useRouter, redirect } from 'next/navigation';
 
-import { useWikiEditorAccess } from '@/hooks/useWikiEditorAccess';
-import { useMutation } from '@/hooks/useMutation';
+import { useMutation, useWikiEditorAccess } from '@/hooks/index';
 import {
   Button,
   Card,

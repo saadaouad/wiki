@@ -49,3 +49,8 @@ export type WikiEditorFormResponse = {
   article?: Article;
   error?: string;
 };
+
+export type WikiEditorAccessOptions = {
+  isEditing: boolean;
+  authorId?: string;
+};

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { formatDate } from '@/utils/formatDate.ts';
+import { formatDate } from '@/utils/index';
 
 describe('formatDate', () => {
   it('calls toLocaleDateString with en-US and long month style', () => {

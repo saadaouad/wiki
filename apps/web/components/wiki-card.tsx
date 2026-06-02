@@ -9,8 +9,7 @@ import {
   CardContent,
   CardFooter
 } from '@/components/index';
-import { formatDate } from '@/utils/formatDate';
-import { truncateText } from '@/utils/truncateText';
+import { formatDate, truncateText } from '@/utils/index';
 import type { WikiCardProps } from '@/types/index';
 
 export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) => {

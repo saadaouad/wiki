@@ -15,10 +15,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/index';
-import { useMutation } from '@/hooks/useMutation';
+import { useMutation } from '@/hooks/index';
 import type { WikiArticleViewerFormResponse } from '@/types/index';
 
-export const DeleteArticle = ({ articleId }: { articleId: string }) => {
+export const ArticleDeleteDialog = ({ articleId }: { articleId: string }) => {
   const { mutate, loading } = useMutation<WikiArticleViewerFormResponse>();
   const router = useRouter();
 

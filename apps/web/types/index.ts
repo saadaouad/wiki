@@ -7,7 +7,8 @@ import type {
   WikiEditorFormErrors,
   WikiEditorProps,
   WikiEditorFormResponse,
-  WikiArticleViewerFormResponse
+  WikiArticleViewerFormResponse,
+  WikiEditorAccessOptions
 } from './wiki';
 
 export type {
@@ -20,5 +21,6 @@ export type {
   WikiEditorFormErrors,
   WikiEditorProps,
   WikiEditorFormResponse,
-  WikiArticleViewerFormResponse
+  WikiArticleViewerFormResponse,
+  WikiEditorAccessOptions
 };

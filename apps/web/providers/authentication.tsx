@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
 import Loading from '@/components/loading';
-import { useFetch } from '@/hooks/useFetch';
+import { useFetch } from '@/hooks/index';
 import type { AuthContextType, MeResponse } from '@/types/index';
 
 const AuthContext = createContext<AuthContextType | null>(null);
