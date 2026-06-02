@@ -4,8 +4,8 @@ import { pageView } from '@/utils/page-view.ts';
 
 const incr = vi.fn();
 
-vi.mock('@/cache/index.ts', () => ({
-  default: { incr: (...args: unknown[]) => incr(...args) }
+vi.mock('@/lib/redis.ts', () => ({
+  redis: { incr: (...args: unknown[]) => incr(...args) }
 }));
 
 describe('pageView', () => {

@@ -10,7 +10,7 @@ import {
   CardFooter
 } from '@/components/index';
 import { formatDate } from '@/utils/formatDate';
-import { textPreview } from '@/utils/textPreview';
+import { truncateText } from '@/utils/truncateText';
 import type { WikiCardProps } from '@/types/index';
 
 export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) => {
@@ -31,7 +31,7 @@ export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) 
         <CardTitle className="text-lg mt-1">{title}</CardTitle>
       </CardHeader>
       <CardContent className="py-0 h-24">
-        <CardDescription>{textPreview(summary)}</CardDescription>
+        <CardDescription>{truncateText(summary)}</CardDescription>
       </CardContent>
       <CardFooter className="pt-2">
         <Link href={href} className="text-blue-600 hover:underline text-sm font-medium w-fit">

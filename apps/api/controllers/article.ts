@@ -3,9 +3,8 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { db } from '@/db/connection.ts';
 import { articles } from '@/db/schema.ts';
-import { resolveImageUrl, slugify, pageView } from '@/utils/index.ts';
-import redis from '@/lib/redis.ts';
-import { summarizeArticle } from '@/lib/summarize-article.ts';
+import { resolveImageUrl, slugify, pageView, summarizeArticle } from '@/utils/index.ts';
+import { redis } from '@/lib/index.ts';
 import type { CreateArticleBody, UpdateArticleBody } from '@repo/schema-validation';
 
 const articleColumns = { authorId: false } as const;
@@ -67,16 +66,27 @@ const allocateUniqueSlug = async (base: string): Promise<string> => {
   throw new Error('Could not allocate a unique slug');
 };
 
+const invalidateArticleCaches = (...slugs: string[]) => {
+  const keys = [...new Set(slugs.filter(Boolean))].map((slug) => `article:${slug}`);
+
+  return Promise.all([
+    redis.del("articles"),
+    keys.length > 0 ? redis.del(...keys) : Promise.resolve(0)
+  ]);
+};
+
+
+// Get all articles
 export const getArticles = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
-    let articlesList = await redis.get('articles');
+    let articlesList = await redis.get("articles");
 
     if (!articlesList) {
       articlesList = await db.query.articles.findMany({
         columns: articleColumns,
         with: withAuthor
       });
-      await redis.set('articles', articlesList, { ex: 60 });
+      await redis.set("articles", articlesList, { ex: 60 });
     }
 
     return reply.status(200).send({ articles: articlesList });
@@ -86,19 +96,21 @@ export const getArticles = async (request: FastifyRequest, reply: FastifyReply) 
   }
 };
 
+// Get an article by slug
 export const getArticle = async (
   request: FastifyRequest<{ Params: { slug: string } }>,
   reply: FastifyReply
 ) => {
   try {
-    let article = await redis.get(`article:${request.params.slug}`);
+    const slug = request.params.slug;
+    let article = await redis.get(`article:${slug}`);
 
     if (!article) {
-      article = await loadArticleResponseBySlug(request.params.slug);
+      article = await loadArticleResponseBySlug(slug);
       if (!article) {
         return reply.status(404).send({ error: 'Article not found' });
       }
-      await redis.set(`article:${request.params.slug}`, article, { ex: 60 });
+      await redis.set(`article:${slug}`, article, { ex: 60 });
     }
 
     return reply.status(200).send({
@@ -113,6 +125,7 @@ export const getArticle = async (
   }
 };
 
+// Create an article
 export const createArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
   const {
@@ -139,7 +152,7 @@ export const createArticle = async (request: FastifyRequest, reply: FastifyReply
       updatedAt: new Date()
     });
 
-    await redis.del('articles');
+    await invalidateArticleCaches(slug);
 
     const article = await loadArticleResponseBySlug(slug);
     return reply.status(201).send({ article });
@@ -149,6 +162,7 @@ export const createArticle = async (request: FastifyRequest, reply: FastifyReply
   }
 };
 
+// Update an article
 export const updateArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
   const { id } = request.params as { id: string };
@@ -172,8 +186,7 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
     }
 
     const slug = updates.title ? await allocateUniqueSlug(slugify(updates.title)) : existing.slug;
-    const shouldRefreshSummary =
-      updates.content !== undefined || updates.title !== undefined;
+    const shouldRefreshSummary = updates.content !== undefined || updates.title !== undefined;
 
     await db
       .update(articles)
@@ -190,8 +203,8 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
       })
       .where(eq(articles.id, id));
 
-    await redis.del('articles');
-   
+    await invalidateArticleCaches(existing.slug, slug);
+
     const article = await loadArticleResponseById(id);
     return reply.status(200).send({ article });
   } catch (error) {
@@ -200,6 +213,7 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
   }
 };
 
+// Delete an article
 export const deleteArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
   const id = (request.params as { id: string }).id;
@@ -218,7 +232,7 @@ export const deleteArticle = async (request: FastifyRequest, reply: FastifyReply
     }
 
     await db.delete(articles).where(eq(articles.id, id));
-    await redis.del('articles');
+    await invalidateArticleCaches(existing.slug);
     return reply.status(204).send();
   } catch (error) {
     request.log.error(error);

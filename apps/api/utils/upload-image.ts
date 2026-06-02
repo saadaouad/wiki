@@ -1,6 +1,6 @@
 import type { FastifyRequest } from 'fastify';
 
-import cloudinary from '@/lib/cloudinary.ts';
+import { cloudinaryConfig } from '@/lib/index.ts';
 
 type CloudinaryResult = {
   secure_url: string;
@@ -9,7 +9,7 @@ type CloudinaryResult = {
 
 export const uploadImageToCloudinary = async (fileBuffer: Buffer): Promise<CloudinaryResult> => {
   return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
+    const stream = cloudinaryConfig.uploader.upload_stream(
       {
         folder: 'articles'
       },

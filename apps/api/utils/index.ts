@@ -3,6 +3,7 @@ import { generateToken, verifyToken } from './jwt.ts';
 import { hashPassword, comparePasswords } from './password.ts';
 import { uploadImageToCloudinary, resolveImageUrl } from './upload-image.ts';
 import { pageView } from './page-view.ts';
+import { summarizeArticle } from './summarize-article.ts';
 
 export {
   generateToken,
@@ -12,5 +13,6 @@ export {
   slugify,
   uploadImageToCloudinary,
   resolveImageUrl,
-  pageView
+  pageView,
+  summarizeArticle
 };
