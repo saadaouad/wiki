@@ -4,11 +4,9 @@ const SUMMARY_SYSTEM =
 const buildSummaryPrompt = (title: string, article: string) =>
   `Summarize the following wiki article in 1-2 concise sentences. Focus on the main idea and the most important details a reader should remember. Do not add opinions or unrelated information. Your goal is inform users of what the gist of a wiki article is so they can decide if they want to read more or not.
 
-<title>
-${title}</title>
+<title>${title}</title>
 
-<wiki_content>
-${article}</wiki_content>`;
+<wiki_content>${article}</wiki_content>`;
 
 type OpenRouterChatResponse = {
   choices?: { message?: { content?: string } }[];

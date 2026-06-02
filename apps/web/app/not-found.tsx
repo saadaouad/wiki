@@ -19,7 +19,7 @@ const NotFound = () => {
             you entered the wrong URL.
           </p>
           <Link href="/">
-            <Button className="w-full" size="lg">
+            <Button className="w-full cursor-pointer" size="lg">
               <Home className="h-4 w-4 mr-2" />
               Back to Wiki Home
             </Button>

@@ -1,12 +1,13 @@
 import { WikiEditor } from '@/components/index';
 import type { PageProps } from '@/types/index';
 
-export default async function EditArticlePage({ params }: PageProps) {
+const EditArticlePage = async ({ params }: PageProps) => {
   const { slug } = await params;
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}`;
-  const articleDetails = await fetch(endpoint);
 
+  const articleDetails = await fetch(endpoint);
   const articleDetailsData = await articleDetails.json();
+  
   const { id, title, content, author } = articleDetailsData.article;
   const authorId = author.id;
 
@@ -21,3 +22,5 @@ export default async function EditArticlePage({ params }: PageProps) {
     />
   );
 }
+
+export default EditArticlePage;

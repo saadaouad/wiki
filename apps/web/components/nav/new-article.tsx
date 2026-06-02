@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/components/index';
 import { Plus } from 'lucide-react';
 
 import { useAuth } from '@/providers/authentication';
+import { Button } from '../ui/button';
 
 export const NewArticle = () => {
   const { isAuthenticated } = useAuth();

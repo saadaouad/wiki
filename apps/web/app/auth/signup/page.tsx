@@ -3,9 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
 import { useForm } from 'react-hook-form';
-import { registerSchema, type z } from '@repo/schema-validation';
 
 import {
   Button,
@@ -17,17 +15,16 @@ import {
   CardTitle,
   Input,
   Label,
-  Loading
 } from '@/components/index';
-import { useMutation } from '@/hooks/useMutation';
-import { useRedirectIfAuthenticated } from '@/hooks/useRedirectIfAuthenticated';
+import { useMutation, useRedirectIfAuthenticated } from '@/hooks/index';
 import { useAuth } from '@/providers/authentication';
+import { registerSchema, type z } from '@repo/schema-validation';
 
 type SignUpValues = z.input<typeof registerSchema>;
 
 type RegisterResponse = { token?: string; error?: string };
 
-function SignUpForm() {
+const SignUpForm = () => {
   const router = useRouter();
   const { setSessionToken } = useAuth();
   const { accessDenied } = useRedirectIfAuthenticated();
@@ -41,7 +38,7 @@ function SignUpForm() {
     defaultValues: { email: '', password: '', firstName: '', lastName: '' }
   });
 
-  if (accessDenied) return <Loading />;
+  if (accessDenied) return null;
 
   const onSubmit = handleSubmit(async (values) => {
     const res = await mutate({

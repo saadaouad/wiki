@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-async function fetcher<T>([url, token]: readonly [string, string]): Promise<T> {
+const fetcher = async <T>([url, token]: readonly [string, string]): Promise<T> => {
   const res = await fetch(url, {
     headers: { Accept: 'application/json', Authorization: `Bearer ${token}` }
   });
@@ -17,7 +17,7 @@ async function fetcher<T>([url, token]: readonly [string, string]): Promise<T> {
   return json;
 }
 
-export function useFetch<TData = unknown>(endpoint: string, token?: string) {
+export const useFetch = <TData = unknown>(endpoint: string, token?: string) => {
   const key = token ? ([`${API_URL}${endpoint}`, token] as const) : null;
 
   const { data, error, isLoading } = useSWR<TData>(key, fetcher, {
@@ -25,7 +25,7 @@ export function useFetch<TData = unknown>(endpoint: string, token?: string) {
   });
 
   return {
-    data: error ? null : (data ?? null),
-    loading: Boolean(token) && isLoading
+    data: !error ? data : null,
+    loading: isLoading
   };
 }

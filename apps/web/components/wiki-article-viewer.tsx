@@ -4,8 +4,8 @@ import dynamic from 'next/dynamic';
 import { Calendar, ChevronRight, Edit, Home, User, Eye } from 'lucide-react';
 
 import { AuthorizationProvider } from '@/providers/authorization';
-import { Badge, Button, Card, CardContent, Loading, DeleteArticle } from '@/components/index';
-import { formatDate } from '@/utils/formatDate';
+import { Badge, Button, Card, CardContent, Loading, ArticleDeleteDialog } from '@/components/index';
+import { formatDate } from '@/utils/index';
 import type { Article } from '@/types/index';
 
 const ReactMarkdown = dynamic(() => import('react-markdown'), {
@@ -55,7 +55,7 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
                 Edit Article
               </Button>
             </Link>
-            <DeleteArticle articleId={article.id} />
+            <ArticleDeleteDialog articleId={article.id} />
           </div>
         </AuthorizationProvider>
       </div>
@@ -158,7 +158,7 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
                 Edit This Article
               </Button>
             </Link>
-            <DeleteArticle articleId={article.id} />
+            <ArticleDeleteDialog articleId={article.id} />
           </div>
         </AuthorizationProvider>
       </div>

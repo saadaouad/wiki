@@ -1,6 +1,21 @@
-export { Badge } from './ui/badge';
-export { Button } from './ui/button';
-export {
+import { ArticleDeleteDialog } from './article-delete-dialog';
+import Loading from './loading';
+import { NavBar } from './nav/nav-bar';
+import { NewArticle } from './nav/new-article';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from './ui/alert-dialog';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import {
   Card,
   CardAction,
   CardContent,
@@ -9,28 +24,46 @@ export {
   CardHeader,
   CardTitle
 } from './ui/card';
-export { Input } from './ui/input';
-export { Label } from './ui/label';
-export { NavBar } from './nav/nav-bar';
-export {
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList
 } from './ui/navigation-menu';
-export { NewArticle } from './nav/new-article';
-export { default as WikiArticleViewer } from './wiki/wiki-article-viewer';
-export { WikiCard } from './wiki/wiki-card';
-export { default as WikiEditor } from './wiki/wiki-editor';
-export { DeleteArticle } from './wiki/delete-article';
-export { default as Loading } from './loading';
+import WikiArticleViewer from './wiki-article-viewer';
+import { WikiCard } from './wiki-card';
+import WikiEditor from './wiki-editor';
+
 export {
   AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
   AlertDialogAction,
-  AlertDialogCancel
-} from './ui/alert-dialog';
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  ArticleDeleteDialog,
+  Badge,
+  Button,
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Input,
+  Label,
+  Loading,
+  NavBar,
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NewArticle,
+  WikiArticleViewer,
+  WikiCard,
+  WikiEditor
+};

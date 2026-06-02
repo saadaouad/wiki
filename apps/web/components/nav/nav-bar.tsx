@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 
+import { useAuth } from '@/providers/authentication';
 import { Button } from '../ui/button';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from '../ui/navigation-menu';
-import { useAuth } from '@/providers/authentication';
 
 export const NavBar = () => {
   const router = useRouter();

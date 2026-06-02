@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { cn } from '@/utils/cn.ts';
+import { cn } from '@/utils/index';
 
 describe('cn', () => {
   it('combines class names and skips falsy values', () => {
