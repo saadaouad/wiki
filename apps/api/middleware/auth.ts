@@ -1,9 +1,9 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import type { JwtPayload } from '@/types/auth.ts';
 import { verifyToken } from '@/utils/index.ts';
+import type { JwtPayload } from '@/types/auth.ts';
 
-export const requireAuthenticateToken = async (
+export const requireToken = async (
   request: FastifyRequest,
   reply: FastifyReply
 ): Promise<void> => {

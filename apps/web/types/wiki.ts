@@ -5,6 +5,7 @@ export interface Article {
   title: string;
   slug: string;
   content: string;
+  summary?: string | null;
   createdAt: string;
   imageUrl?: string | null;
   author: User;

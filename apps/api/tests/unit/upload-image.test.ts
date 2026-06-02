@@ -1,7 +1,7 @@
 import type { FastifyRequest } from 'fastify';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { resolveImageUrl, uploadImageToCloudinary } from '@/utils/index.ts';
+import { resolveImageUrl, uploadImageToCloudinary } from '@/utils/upload-image.ts';
 
 const uploadStream = vi.fn();
 
@@ -11,7 +11,7 @@ const cloudinaryResult = {
 };
 
 vi.mock('@/lib/cloudinary.ts', () => ({
-  default: {
+  cloudinaryConfig: {
     uploader: {
       upload_stream: (...args: unknown[]) => uploadStream(...args)
     }

@@ -2,14 +2,31 @@ import { eq } from 'drizzle-orm';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
 import { db } from '@/db/connection.ts';
-import { users } from '@/db/schema.ts';
+import { articles, users } from '@/db/schema.ts';
 import { generateToken } from '@/utils/index.ts';
-import redis from '@/lib/redis.ts';
+import { redis } from '@/lib/redis.ts';
 import type { User } from '@/types/user.ts';
+
+const userMeCacheKey = (userId: string) => `user:me:${userId}`;
+
+export const invalidateUserCaches = async (userId: string) => {
+  const authorArticles = await db.query.articles.findMany({
+    columns: { slug: true },
+    where: eq(articles.authorId, userId)
+  });
+
+  const articleKeys = authorArticles.map((article) => `article:${article.slug}`);
+
+  await Promise.all([
+    redis.del(userMeCacheKey(userId)),
+    redis.del('articles'),
+    articleKeys.length > 0 ? redis.del(...articleKeys) : Promise.resolve(0)
+  ]);
+};
 
 export const me = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
-  const cacheKey = `user:me:${userId}`;
+  const cacheKey = userMeCacheKey(userId);
 
   try {
     let profile = await redis.get<User>(cacheKey);

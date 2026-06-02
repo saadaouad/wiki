@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 
+import { articleIdParamsSchema, createArticleSchema } from '@repo/schema-validation';
 import {
   createArticle,
   deleteArticle,
@@ -7,9 +8,7 @@ import {
   getArticle,
   updateArticle
 } from '@/controllers/article.ts';
-import { requireAuthenticateToken } from '@/middleware/auth.ts';
-import { parseArticleMultipart, validateUpdateArticleBody } from '@/middleware/articleBody.ts';
-import { articleIdParamsSchema, createArticleSchema } from '@repo/schema-validation';
+import { requireToken, parseArticleMultipart, validateUpdateArticleBody } from '@/middleware/index.ts';
 
 export const articleRoutes = async (app: FastifyInstance) => {
   app.get('/articles', getArticles);
@@ -18,7 +17,7 @@ export const articleRoutes = async (app: FastifyInstance) => {
     '/articles',
     {
       preValidation: parseArticleMultipart,
-      preHandler: requireAuthenticateToken,
+      preHandler: requireToken,
       schema: { body: createArticleSchema }
     },
     createArticle
@@ -27,7 +26,7 @@ export const articleRoutes = async (app: FastifyInstance) => {
     '/articles/:id',
     {
       preValidation: parseArticleMultipart,
-      preHandler: [requireAuthenticateToken, validateUpdateArticleBody],
+      preHandler: [requireToken, validateUpdateArticleBody],
       schema: { params: articleIdParamsSchema }
     },
     updateArticle
@@ -35,7 +34,7 @@ export const articleRoutes = async (app: FastifyInstance) => {
   app.delete(
     '/articles/:id',
     {
-      preHandler: requireAuthenticateToken,
+      preHandler: requireToken,
       schema: { params: articleIdParamsSchema }
     },
     deleteArticle

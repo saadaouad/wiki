@@ -1,19 +1,28 @@
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { env as loadEnv } from 'custom-env';
 import { z } from '@repo/schema-validation';
 
+const apiRoot = resolve(dirname(fileURLToPath(import.meta.url)));
+
 // Determine application stage
 process.env.APP_STAGE =
-  process.env.APP_STAGE || (process.env.NODE_ENV === 'production' ? 'prod' : 'dev');
+  process.env.APP_STAGE ||
+  (process.env.NODE_ENV === 'production'
+    ? 'prod'
+    : process.env.NODE_ENV === 'test'
+      ? 'test'
+      : 'dev');
 
 const isProduction = process.env.APP_STAGE === 'prod';
 const isDevelopment = process.env.APP_STAGE === 'dev';
 const isTest = process.env.APP_STAGE === 'test';
 
-// Load .env files based on environment
+// Load .env files based on environment (apiRoot so cwd-independent e.g. Vitest monorepo root)
 if (isDevelopment) {
-  loadEnv(); // Loads .env
+  loadEnv(true, apiRoot);
 } else if (isTest) {
-  loadEnv('test'); // Loads .env.test
+  loadEnv('test', apiRoot);
 }
 
 // Define validation schema with Zod
