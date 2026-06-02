@@ -7,8 +7,6 @@ const mockFetch = vi.fn<typeof fetch>();
 beforeEach(() => {
   mockFetch.mockReset();
   vi.stubGlobal('fetch', mockFetch);
-  vi.stubEnv('OPENROUTER_API_KEY', 'test-key');
-  vi.stubEnv('OPENROUTER_MODEL', 'test-model');
 });
 
 describe('summarizeArticle', () => {

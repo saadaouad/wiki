@@ -2,18 +2,8 @@ import { createSecretKey } from 'node:crypto';
 import { decodeProtectedHeader, SignJWT } from 'jose';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { env } from '@/env.ts';
 import { generateToken, verifyToken } from '@/utils/index.ts';
-
-vi.mock('@/env.ts', () => ({
-  env: {
-    JWT_SECRET: 'x'.repeat(32),
-    JWT_EXPIRES_IN: '2h'
-  },
-  default: {
-    JWT_SECRET: 'x'.repeat(32),
-    JWT_EXPIRES_IN: '2h'
-  }
-}));
 
 describe('generateToken', () => {
   beforeEach(() => {
@@ -53,8 +43,7 @@ describe('generateToken', () => {
 });
 
 describe('verifyToken', () => {
-  const mockedSecret = 'x'.repeat(32);
-  const secretKey = createSecretKey(mockedSecret, 'utf-8');
+  const secretKey = createSecretKey(env.JWT_SECRET, 'utf-8');
 
   it('resolves with the payload for a valid token', async () => {
     const payload = {

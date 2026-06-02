@@ -1,15 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { comparePasswords, hashPassword } from '@/utils/index.ts';
-
-vi.mock('@/env.ts', () => ({
-  env: {
-    BCRYPT_ROUNDS: 10
-  },
-  default: {
-    BCRYPT_ROUNDS: 10
-  }
-}));
 
 describe('hashPassword', () => {
   it('returns a bcrypt hash string', async () => {
