@@ -21,8 +21,7 @@ export const parseArticleMultipart = async (
     if (part.type === 'file') {
       request.articleImageBuffer = await part.toBuffer();
     } else {
-      body[part.fieldname] =
-        part.fieldname === 'published' ? part.value === 'true' : part.value;
+      body[part.fieldname] = part.value;
     }
   }
 

@@ -14,20 +14,16 @@ const imageUrl = z
   .nullable()
   .optional();
 
-const published = z.boolean().optional();
-
 export const createArticleSchema = z.object({
   title,
   content,
-  imageUrl,
-  published
+  imageUrl
 });
 
 export const updateArticleFieldsSchema = z.object({
   title,
   content,
-  imageUrl,
-  published
+  imageUrl
 }).partial();
 
 export const updateArticleSchema = updateArticleFieldsSchema.refine(

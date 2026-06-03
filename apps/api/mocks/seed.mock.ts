@@ -93,7 +93,6 @@ If you encounter any issues or have questions about using WikiFlow, don't hesita
 Happy writing! 🚀`,
   imageUrl:
     'https://fastly.picsum.photos/id/866/536/354.jpg?hmac=tGofDTV7tl2rprappPzKFiZ9vDh5MKj39oa2D--gqhA',
-  published: true,
   summary:
     'WikiFlow is a Next.js wiki for writing Markdown articles with preview, uploads, and search. This guide covers creating articles, Markdown basics, and tips for organizing your knowledge.'
 };

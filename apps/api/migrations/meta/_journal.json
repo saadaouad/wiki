@@ -15,6 +15,13 @@
       "when": 1780324709835,
       "tag": "0001_add_article_summary",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780448666022,
+      "tag": "0002_remove_article_published",
+      "breakpoints": true
     }
   ]
 }

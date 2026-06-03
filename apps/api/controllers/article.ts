@@ -128,12 +128,7 @@ export const getArticle = async (
 // Create an article
 export const createArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
-  const {
-    title,
-    content,
-    published = false,
-    imageUrl: bodyImageUrl
-  } = request.body as CreateArticleBody;
+  const { title, content, imageUrl: bodyImageUrl } = request.body as CreateArticleBody;
   const imageUrl = await resolveImageUrl(request, bodyImageUrl);
   const baseSlug = slugify(title);
 
@@ -147,7 +142,6 @@ export const createArticle = async (request: FastifyRequest, reply: FastifyReply
       content,
       summary,
       imageUrl,
-      published,
       authorId: userId,
       updatedAt: new Date()
     });
