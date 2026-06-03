@@ -49,6 +49,11 @@ const envSchema = z.object({
   // Security
   BCRYPT_ROUNDS: z.coerce.number().min(10).max(20).default(12),
 
+  // Rate limiting
+  RATE_LIMIT_WINDOW_MS: z.coerce.number().positive().default(900_000),
+  RATE_LIMIT_MAX_REQUESTS: z.coerce.number().positive().default(100),
+  RATE_LIMIT_AUTH_MAX_REQUESTS: z.coerce.number().positive().default(10),
+
   // CORS configuration
   CORS_ORIGIN: z
     .string()
