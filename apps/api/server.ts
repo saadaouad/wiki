@@ -17,7 +17,12 @@ app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
 await app.register(helmet);
-await app.register(multipart);
+await app.register(multipart, {
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+    files: 1
+  }
+});
 await app.register(cors, {
   origin: env.CORS_ORIGIN,
   credentials: true,

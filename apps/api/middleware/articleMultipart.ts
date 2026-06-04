@@ -3,6 +3,20 @@ import type { ZodError } from 'zod';
 
 import { updateArticleFieldsSchema } from '@repo/schema-validation';
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+const validateImageUpload = (type: string | undefined, size: number) => {
+  if (!type || !ALLOWED_IMAGE_TYPES.includes(type)) {
+    throw new Error('Invalid file type');
+  }
+
+  if (size > MAX_FILE_SIZE) {
+    throw new Error('File too large');
+  }
+};
+
 const sendValidationError = (reply: FastifyReply, error: ZodError) =>
   reply.status(400).send({
     error: 'Validation Error',
@@ -11,7 +25,7 @@ const sendValidationError = (reply: FastifyReply, error: ZodError) =>
 
 export const parseArticleMultipart = async (
   request: FastifyRequest,
-  _reply: FastifyReply
+  reply: FastifyReply
 ): Promise<void> => {
   if (!request.isMultipart()) return;
 
@@ -19,7 +33,14 @@ export const parseArticleMultipart = async (
 
   for await (const part of request.parts()) {
     if (part.type === 'file') {
-      request.articleImageBuffer = await part.toBuffer();
+      try {
+        const buffer = await part.toBuffer();
+        validateImageUpload(part.mimetype, buffer.length);
+        request.articleImageBuffer = buffer;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Invalid upload';
+        return reply.status(message === 'File too large' ? 413 : 400).send({ error: message });
+      }
     } else {
       body[part.fieldname] = part.value;
     }
@@ -38,8 +59,7 @@ export const validateUpdateArticleBody = async (
   }
 
   const hasUpdate =
-    !!request.articleImageBuffer ||
-    Object.values(parsed.data).some((value) => value !== undefined);
+    !!request.articleImageBuffer || Object.values(parsed.data).some((value) => value !== undefined);
 
   if (!hasUpdate) {
     return reply.status(400).send({
