@@ -35,7 +35,7 @@ export const summarizeArticle = async (
       model,
       messages: [
         { role: 'system', content: SUMMARY_SYSTEM },
-        { role: 'user', content: buildSummaryPrompt(title, article) }
+        { role: 'user', content: buildSummaryPrompt(title, article.slice(0, 12_000)) }
       ],
       max_tokens: 150,
       temperature: 0.3

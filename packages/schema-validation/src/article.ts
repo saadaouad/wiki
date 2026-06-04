@@ -6,7 +6,13 @@ const title = z
   .min(1, 'Title is required')
   .max(255, 'Title must be at most 255 characters');
 
-const content = z.string().min(1, 'Content is required');
+const content = z
+  .string()
+  .min(1, 'Content is required')
+  .max(
+    50_000,
+    'Content must be at most 50_000 characters'
+  );
 
 const imageUrl = z
   .union([z.string().trim().url(), z.literal('')])

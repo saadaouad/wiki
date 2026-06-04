@@ -22,6 +22,13 @@
       "when": 1780448666022,
       "tag": "0002_remove_article_published",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1780537309231,
+      "tag": "0003_bound_article_content",
+      "breakpoints": true
     }
   ]
 }

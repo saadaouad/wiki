@@ -15,7 +15,7 @@ export const articles = pgTable('articles', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: varchar('title', { length: 255 }).notNull(),
   slug: varchar('slug', { length: 255 }).notNull().unique(),
-  content: varchar('content').notNull(),
+  content: varchar('content', { length: 50_000 }).notNull(),
   summary: varchar('summary'),
   imageUrl: varchar('image_url'),
   authorId: uuid('author_id')
