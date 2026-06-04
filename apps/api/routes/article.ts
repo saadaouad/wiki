@@ -12,7 +12,9 @@ import { requireToken, parseArticleMultipart, validateUpdateArticleBody } from '
 
 export const articleRoutes = async (app: FastifyInstance) => {
   app.get('/articles', getArticles);
+
   app.get('/articles/:slug', getArticle);
+
   app.post(
     '/articles',
     {
@@ -22,6 +24,7 @@ export const articleRoutes = async (app: FastifyInstance) => {
     },
     createArticle
   );
+
   app.patch(
     '/articles/:id',
     {
@@ -31,6 +34,7 @@ export const articleRoutes = async (app: FastifyInstance) => {
     },
     updateArticle
   );
+
   app.delete(
     '/articles/:id',
     {

@@ -3,8 +3,6 @@ import { toast } from 'sonner';
 
 import { useAuth } from '@/providers/authentication';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
 type MutationMethod = 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 type MutationParams<TBody = unknown> = {
@@ -14,6 +12,8 @@ type MutationParams<TBody = unknown> = {
   successMessage?: string;
   isProtected?: boolean;
 };
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export function useMutation<TData = unknown>() {
   const { token } = useAuth();

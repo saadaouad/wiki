@@ -4,12 +4,9 @@ import type { PageProps } from '@/types/index';
 const EditArticlePage = async ({ params }: PageProps) => {
   const { slug } = await params;
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/articles/${slug}`;
-
   const articleDetails = await fetch(endpoint);
   const articleDetailsData = await articleDetails.json();
-  
   const { id, title, content, author } = articleDetailsData.article;
-  const authorId = author.id;
 
   return (
     <WikiEditor
@@ -17,7 +14,7 @@ const EditArticlePage = async ({ params }: PageProps) => {
       articleSlug={slug}
       initialTitle={title}
       initialContent={content}
-      authorId={authorId}
+      authorId={author.id}
       isEditing={true}
     />
   );

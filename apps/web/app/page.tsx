@@ -3,7 +3,6 @@ import type { Article } from '@/types/index';
 
 const Home = async () => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/articles`;
-
   const articles = await fetch(endpoint, { cache: 'no-cache' });
   const articlesData = await articles.json();
 
