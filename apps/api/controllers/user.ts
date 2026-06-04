@@ -3,7 +3,6 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 
 import { db } from '@/db/connection.ts';
 import { articles, users } from '@/db/schema.ts';
-import { generateToken } from '@/utils/index.ts';
 import { redis } from '@/lib/redis.ts';
 import type { User } from '@/types/user.ts';
 
@@ -45,14 +44,7 @@ export const me = async (request: FastifyRequest, reply: FastifyReply) => {
       profile = user;
       await redis.set(`user:${userId}`, profile, { ex: 60 });
     }
-    const token = await generateToken({
-      id: profile.id,
-      email: profile.email
-    });
-    return reply.status(200).send({
-      user: profile,
-      token
-    });
+    return reply.status(200).send({ user: profile });
   } catch (error) {
     request.log.error(error);
     return reply.status(500).send({

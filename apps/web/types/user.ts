@@ -8,5 +8,4 @@ export interface User {
 
 export type MeResponse = {
   user: User;
-  token: string;
 };

@@ -19,6 +19,6 @@ export const requireToken = async (
     request.user = payload as JwtPayload;
   } catch (err) {
     console.error('Authentication error', err);
-    return reply.status(403).send({ error: 'Invalid or expired token' });
+    return reply.status(401).send({ error: 'Invalid or expired token' });
   }
 };

@@ -5,6 +5,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 import Loading from '@/components/loading';
 import { useFetch } from '@/hooks/index';
 import type { AuthContextType, MeResponse } from '@/types/index';
+import { clearAuthToken, getAuthToken, setAuthToken } from '@/utils/auth-cookie';
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -13,15 +14,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setTokenState(localStorage.getItem('token'));
+    setTokenState(getAuthToken());
     setHydrated(true);
   }, []);
 
   const setSessionToken = useCallback((next: string | null) => {
     if (next) {
-      localStorage.setItem('token', next);
+      setAuthToken(next);
     } else {
-      localStorage.removeItem('token');
+      clearAuthToken();
     }
     setTokenState(next);
   }, []);
