@@ -67,7 +67,26 @@ const envSchema = z.object({
   // Logging
   LOG_LEVEL: z
     .enum(['error', 'warn', 'info', 'debug', 'trace'])
-    .default(isProduction ? 'info' : 'debug')
+    .default(isProduction ? 'info' : 'debug'),
+
+  // Cloudinary (article images)
+  CLOUDINARY_CLOUD_NAME: z.string().min(1),
+  CLOUDINARY_API_KEY: z.string().min(1),
+  CLOUDINARY_API_SECRET: z.string().min(1),
+
+  // Upstash Redis (caching)
+  UPSTASH_REDIS_REST_URL: z.string().url(),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
+
+  // OpenRouter (article summaries)
+  OPENROUTER_API_KEY: z.string().min(1),
+  OPENROUTER_MODEL: z.string().min(1),
+  OPENROUTER_SITE_URL: z.string().url().default('http://localhost:3000'),
+  OPENROUTER_APP_NAME: z.string().min(1).default('wiki'),
+  OPENROUTER_URL: z
+    .string()
+    .url()
+    .default('https://openrouter.ai/api/v1/chat/completions')
 });
 
 // Type inference from schema

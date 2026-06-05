@@ -1,3 +1,5 @@
+import { env } from '@/env.ts';
+
 const SUMMARY_SYSTEM =
   'You are an assistant that writes concise factual summaries.';
 
@@ -20,19 +22,16 @@ export const summarizeArticle = async (
     throw new Error('Article content is required to generate a summary.');
   }
 
-  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
-  const model = process.env.OPENROUTER_MODEL?.trim();
-
-  const res = await fetch(process.env.OPENROUTER_URL ?? 'https://openrouter.ai/api/v1/chat/completions', {
+  const res = await fetch(env.OPENROUTER_URL, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${env.OPENROUTER_API_KEY}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': process.env.OPENROUTER_SITE_URL ?? 'http://localhost:3000',
-      'X-Title': process.env.OPENROUTER_APP_NAME ?? 'wiki'
+      'HTTP-Referer': env.OPENROUTER_SITE_URL,
+      'X-Title': env.OPENROUTER_APP_NAME
     },
     body: JSON.stringify({
-      model,
+      model: env.OPENROUTER_MODEL,
       messages: [
         { role: 'system', content: SUMMARY_SYSTEM },
         { role: 'user', content: buildSummaryPrompt(title, article.slice(0, 12_000)) }
