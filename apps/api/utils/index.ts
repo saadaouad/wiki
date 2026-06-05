@@ -4,6 +4,7 @@ import { hashPassword, comparePasswords } from './password.ts';
 import { uploadImageToCloudinary, resolveImageUrl } from './upload-image.ts';
 import { pageView } from './page-view.ts';
 import { summarizeArticle } from './summarize-article.ts';
+import { isDuplicateKeyError } from './duplicate-key-error.ts';
 
 export {
   generateToken,
@@ -14,5 +15,6 @@ export {
   uploadImageToCloudinary,
   resolveImageUrl,
   pageView,
-  summarizeArticle
+  summarizeArticle,
+  isDuplicateKeyError
 };

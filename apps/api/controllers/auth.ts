@@ -3,7 +3,12 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 
 import { db } from '@/db/connection.ts';
 import { users } from '@/db/schema.ts';
-import { comparePasswords, generateToken, hashPassword } from '@/utils/index.ts';
+import {
+  comparePasswords,
+  generateToken,
+  hashPassword,
+  isDuplicateKeyError
+} from '@/utils/index.ts';
 import type { RegisterBody, LoginBody } from '@/types/auth.ts';
 
 export const register = async (
@@ -47,6 +52,13 @@ export const register = async (
       token
     });
   } catch (error) {
+    if (isDuplicateKeyError(error, 'users_email_unique')) {
+      request.log.warn('Registration rejected: email already registered');
+      return reply.status(409).send({
+        error: 'An account with this email already exists'
+      });
+    }
+
     request.log.error(error);
 
     return reply.status(500).send({
