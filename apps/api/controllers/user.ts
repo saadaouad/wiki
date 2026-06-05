@@ -4,6 +4,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { db } from '@/db/connection.ts';
 import { articles, users } from '@/db/schema.ts';
 import { redis } from '@/lib/redis.ts';
+import { createListCache } from '@/utils/list-cache.ts';
 import type { User } from '@/types/user.ts';
 
 export const invalidateUserCaches = async (userId: string) => {
@@ -16,7 +17,7 @@ export const invalidateUserCaches = async (userId: string) => {
 
   await Promise.all([
     redis.del(`user:${userId}`),
-    redis.del('articles'),
+    createListCache('articles').bumpVersion(),
     articleKeys.length > 0 ? redis.del(...articleKeys) : Promise.resolve(0)
   ]);
 };

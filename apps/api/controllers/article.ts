@@ -1,11 +1,12 @@
-import { eq } from 'drizzle-orm';
+import { count, desc, eq } from 'drizzle-orm';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { redis } from '@/lib/index.ts';
 import { db } from '@/db/connection.ts';
 import { articles } from '@/db/schema.ts';
+import { createListCache } from '@/utils/list-cache.ts';
 import { resolveImageUrl, slugify, pageView, summarizeArticle } from '@/utils/index.ts';
-import type { CreateArticleBody, UpdateArticleBody } from '@repo/schema-validation';
+import type { CreateArticleBody, ListArticlesQuery, UpdateArticleBody } from '@repo/schema-validation';
 
 const articleColumns = { authorId: false } as const;
 
@@ -70,33 +71,62 @@ const invalidateArticleCaches = (...slugs: string[]) => {
   const keys = [...new Set(slugs.filter(Boolean))].map((slug) => `article:${slug}`);
 
   return Promise.all([
-    redis.del("articles"),
+    createListCache('articles').bumpVersion(),
     keys.length > 0 ? redis.del(...keys) : Promise.resolve(0)
   ]);
 };
 
-
-// Get all articles
-export const getArticles = async (request: FastifyRequest, reply: FastifyReply) => {
+// Get articles
+export const getArticles = async (
+  request: FastifyRequest<{ Querystring: ListArticlesQuery }>,
+  reply: FastifyReply
+) => {
   try {
-    let articlesList = await redis.get("articles");
+    const { page, limit } = request.query;
+    const cacheVersion = await createListCache('articles').getVersion();
+    const cacheKey = createListCache('articles').cacheKey(page, limit, cacheVersion);
 
-    if (!articlesList) {
-      articlesList = await db.query.articles.findMany({
-        columns: articleColumns,
-        with: withAuthor
-      });
-      await redis.set("articles", articlesList, { ex: 60 });
+    let response = await redis.get(cacheKey);
+
+    if (!response) {
+      const offset = (page - 1) * limit;
+
+      const [articlesList, totalResult] = await Promise.all([
+        db.query.articles.findMany({
+          columns: articleColumns,
+          with: withAuthor,
+          orderBy: desc(articles.createdAt),
+          limit,
+          offset
+        }),
+        db.select({ value: count() }).from(articles)
+      ]);
+
+      const total = totalResult[0]?.value ?? 0;
+      const totalPages = total === 0 ? 0 : Math.ceil(total / limit);
+
+      response = {
+        articles: articlesList,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasMore: page < totalPages
+        }
+      };
+
+      await redis.set(cacheKey, response, { ex: 60 });
     }
 
-    return reply.status(200).send({ articles: articlesList });
+    return reply.status(200).send(response);
   } catch (error) {
     request.log.error(error);
     return reply.status(500).send({ error: 'Failed to get articles' });
   }
 };
 
-// Get an article by slug
+// Get article
 export const getArticle = async (
   request: FastifyRequest<{ Params: { slug: string } }>,
   reply: FastifyReply
@@ -125,7 +155,7 @@ export const getArticle = async (
   }
 };
 
-// Create an article
+// Create article
 export const createArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
   const { title, content, imageUrl: bodyImageUrl } = request.body as CreateArticleBody;
@@ -156,7 +186,7 @@ export const createArticle = async (request: FastifyRequest, reply: FastifyReply
   }
 };
 
-// Update an article
+// Update article
 export const updateArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
   const { id } = request.params as { id: string };
@@ -207,7 +237,7 @@ export const updateArticle = async (request: FastifyRequest, reply: FastifyReply
   }
 };
 
-// Delete an article
+// Delete article
 export const deleteArticle = async (request: FastifyRequest, reply: FastifyReply) => {
   const userId = request.user!.id;
   const id = (request.params as { id: string }).id;

@@ -1,6 +1,10 @@
 import type { FastifyInstance } from 'fastify';
 
-import { articleIdParamsSchema, createArticleSchema } from '@repo/schema-validation';
+import {
+  articleIdParamsSchema,
+  createArticleSchema,
+  listArticlesQuerySchema
+} from '@repo/schema-validation';
 import {
   createArticle,
   deleteArticle,
@@ -11,7 +15,13 @@ import {
 import { requireToken, parseArticleMultipart, validateUpdateArticleBody } from '@/middleware/index.ts';
 
 export const articleRoutes = async (app: FastifyInstance) => {
-  app.get('/articles', getArticles);
+  app.get(
+    '/articles',
+    {
+      schema: { querystring: listArticlesQuerySchema }
+    },
+    getArticles
+  );
 
   app.get('/articles/:slug', getArticle);
 
