@@ -7,7 +7,9 @@ import * as schema from './schema.ts';
 
 const createPool = () => {
   return new Pool({
-    connectionString: env.DATABASE_URL
+    connectionString: env.DATABASE_URL,
+    min: env.DATABASE_POOL_MIN,
+    max: env.DATABASE_POOL_MAX
   });
 };
 
