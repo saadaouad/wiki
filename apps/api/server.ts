@@ -9,7 +9,7 @@ import { authRoutes, healthRoute, userRoutes, articleRoutes } from '@/routes/ind
 import { env } from '@/env.ts';
 
 const app = Fastify({
-  logger: true,
+  logger: { level: env.LOG_LEVEL },
   disableRequestLogging: process.env.NODE_ENV === 'test'
 });
 
