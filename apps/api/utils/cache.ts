@@ -10,3 +10,9 @@ export const createListCache = (namespace: string) => {
       `${namespace}:v${version}:p${page}:l${limit}`
   };
 };
+
+export const pageView = async (keyFor: string) => {
+  const newVal = await redis.incr(keyFor);
+
+  return +newVal;
+};

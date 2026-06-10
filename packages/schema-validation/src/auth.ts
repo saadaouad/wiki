@@ -7,6 +7,7 @@ const email = z
   .email('Invalid email')
   .transform((v) => v.toLowerCase());
 
+// To do: align with NIST SP 800-63B: favor length over complexity rules
 const password = z.string().min(1, 'Password is required').min(6, 'Password is short');
 
 export const registerSchema = z.object({
