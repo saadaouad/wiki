@@ -8,7 +8,8 @@ export const registerRateLimit = async (app: FastifyInstance) => {
     global: true,
     max: isTestEnv() ? 0 : env.RATE_LIMIT_MAX_REQUESTS,
     timeWindow: env.RATE_LIMIT_WINDOW_MS,
-    skipOnError: true
+    skipOnError: true,
+    allowList: (request) => request.url.startsWith('/docs')
   });
 };
 

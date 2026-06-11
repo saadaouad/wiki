@@ -2,8 +2,10 @@ import type { FastifyInstance } from 'fastify';
 
 import {
   articleIdParamsSchema,
+  articleSlugParamsSchema,
   createArticleSchema,
-  listArticlesQuerySchema
+  listArticlesQuerySchema,
+  updateArticleFieldsSchema
 } from '@repo/schema-validation';
 import {
   createArticle,
@@ -12,25 +14,47 @@ import {
   getArticle,
   updateArticle
 } from '@/controllers/article.ts';
-import { requireToken, parseArticleMultipart, validateUpdateArticleBody } from '@/middleware/index.ts';
+import { bearerAuthSecurity, multipartArticleDescription } from '@/openapi.ts';
+import {
+  requireToken,
+  parseArticleMultipart,
+  validateUpdateArticleBody
+} from '@/middleware/index.ts';
 
 export const articleRoutes = async (app: FastifyInstance) => {
   app.get(
     '/articles',
     {
-      schema: { querystring: listArticlesQuerySchema }
+      schema: {
+        tags: ['Articles'],
+        querystring: listArticlesQuerySchema
+      }
     },
     getArticles
   );
 
-  app.get('/articles/:slug', getArticle);
+  app.get(
+    '/articles/:slug',
+    {
+      schema: {
+        tags: ['Articles'],
+        params: articleSlugParamsSchema
+      }
+    },
+    getArticle
+  );
 
   app.post(
     '/articles',
     {
       preValidation: parseArticleMultipart,
       preHandler: requireToken,
-      schema: { body: createArticleSchema }
+      schema: {
+        tags: ['Articles'],
+        security: bearerAuthSecurity,
+        description: multipartArticleDescription,
+        body: createArticleSchema
+      }
     },
     createArticle
   );
@@ -40,7 +64,13 @@ export const articleRoutes = async (app: FastifyInstance) => {
     {
       preValidation: parseArticleMultipart,
       preHandler: [requireToken, validateUpdateArticleBody],
-      schema: { params: articleIdParamsSchema }
+      schema: {
+        tags: ['Articles'],
+        security: bearerAuthSecurity,
+        description: multipartArticleDescription,
+        params: articleIdParamsSchema,
+        body: updateArticleFieldsSchema
+      }
     },
     updateArticle
   );
@@ -49,7 +79,11 @@ export const articleRoutes = async (app: FastifyInstance) => {
     '/articles/:id',
     {
       preHandler: requireToken,
-      schema: { params: articleIdParamsSchema }
+      schema: {
+        tags: ['Articles'],
+        security: bearerAuthSecurity,
+        params: articleIdParamsSchema
+      }
     },
     deleteArticle
   );

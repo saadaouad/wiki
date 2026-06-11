@@ -10,6 +10,7 @@ export const authRoutes = async (app: FastifyInstance) => {
     {
       config: authRateLimitConfig,
       schema: {
+        tags: ['Auth'],
         body: registerSchema
       }
     },
@@ -21,6 +22,7 @@ export const authRoutes = async (app: FastifyInstance) => {
     {
       config: authRateLimitConfig,
       schema: {
+        tags: ['Auth'],
         body: loginSchema
       }
     },

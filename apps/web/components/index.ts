@@ -26,11 +26,7 @@ import {
 } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList
-} from './ui/navigation-menu';
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from './ui/navigation-menu';
 import WikiArticleViewer from './wiki-article-viewer';
 import { WikiCard } from './wiki-card';
 import WikiEditor from './wiki-editor';

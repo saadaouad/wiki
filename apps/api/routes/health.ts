@@ -6,6 +6,9 @@ export const healthRoute = (fastify: FastifyInstance) => {
     {
       config: {
         rateLimit: false
+      },
+      schema: {
+        tags: ['Health']
       }
     },
     (_request, reply) => {

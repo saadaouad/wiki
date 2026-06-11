@@ -13,7 +13,6 @@ import { formatDate, truncateText } from '@/utils/index';
 import type { WikiCardProps } from '@/types/index';
 
 export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) => {
-
   return (
     <Card>
       <CardHeader className="pb-2 pt-1">

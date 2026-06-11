@@ -18,6 +18,6 @@ const EditArticlePage = async ({ params }: PageProps) => {
       isEditing={true}
     />
   );
-}
+};
 
 export default EditArticlePage;

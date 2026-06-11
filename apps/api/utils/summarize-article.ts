@@ -1,7 +1,6 @@
 import { env } from '@/env.ts';
 
-const SUMMARY_SYSTEM =
-  'You are an assistant that writes concise factual summaries.';
+const SUMMARY_SYSTEM = 'You are an assistant that writes concise factual summaries.';
 
 const buildSummaryPrompt = (title: string, article: string) =>
   `Summarize the following wiki article in 1-2 concise sentences. Focus on the main idea and the most important details a reader should remember. Do not add opinions or unrelated information. Your goal is inform users of what the gist of a wiki article is so they can decide if they want to read more or not.
@@ -14,10 +13,7 @@ type OpenRouterChatResponse = {
   choices?: { message?: { content?: string } }[];
 };
 
-export const summarizeArticle = async (
-  title: string,
-  article: string
-): Promise<string> => {
+export const summarizeArticle = async (title: string, article: string): Promise<string> => {
   if (!article?.trim()) {
     throw new Error('Article content is required to generate a summary.');
   }
@@ -55,4 +51,4 @@ export const summarizeArticle = async (
   }
 
   return summary;
-}
+};

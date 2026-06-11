@@ -4,8 +4,18 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import { redis } from '@/lib/index.ts';
 import { db } from '@/db/connection.ts';
 import { articles } from '@/db/schema.ts';
-import { resolveImageUrl, slugify, pageView, summarizeArticle, createListCache } from '@/utils/index.ts';
-import type { CreateArticleBody, ListArticlesQuery, UpdateArticleBody } from '@repo/schema-validation';
+import {
+  resolveImageUrl,
+  slugify,
+  pageView,
+  summarizeArticle,
+  createListCache
+} from '@/utils/index.ts';
+import type {
+  CreateArticleBody,
+  ListArticlesQuery,
+  UpdateArticleBody
+} from '@repo/schema-validation';
 
 const articleColumns = { authorId: false } as const;
 
@@ -34,7 +44,7 @@ const loadArticleResponseById = async (id: string) => {
 const allocateUniqueSlug = async (base: string): Promise<string> => {
   const max = 255;
 
-  if (!base)  {
+  if (!base) {
     return '';
   }
 

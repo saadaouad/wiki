@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
   Input,
-  Label,
+  Label
 } from '@/components/index';
 import { useMutation, useRedirectIfAuthenticated } from '@/hooks/index';
 import { useAuth } from '@/providers/authentication';
@@ -113,6 +113,6 @@ const SignInForm = () => {
       </Card>
     </div>
   );
-}
+};
 
 export default SignInForm;

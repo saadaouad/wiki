@@ -11,10 +11,7 @@ const keyError = (error: unknown): keyError | undefined => {
   return e.cause?.code ? e.cause : undefined;
 };
 
-export const isDuplicateKeyError = (
-  error: unknown,
-  constraint?: string
-): boolean => {
+export const isDuplicateKeyError = (error: unknown, constraint?: string): boolean => {
   const pg = keyError(error);
   if (pg?.code !== '23505') {
     return false;

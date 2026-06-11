@@ -18,7 +18,10 @@ describe('isDuplicateKeyError', () => {
   it('rejects other errors and constraint mismatches', () => {
     expect(isDuplicateKeyError({ code: '23503' })).toBe(false);
     expect(
-      isDuplicateKeyError({ code: '23505', constraint: 'articles_slug_unique' }, 'users_email_unique')
+      isDuplicateKeyError(
+        { code: '23505', constraint: 'articles_slug_unique' },
+        'users_email_unique'
+      )
     ).toBe(false);
   });
 });

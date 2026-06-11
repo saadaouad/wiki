@@ -3,10 +3,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { verifyToken } from '@/utils/index.ts';
 import type { JwtPayload } from '@/types/auth.ts';
 
-export const requireToken = async (
-  request: FastifyRequest,
-  reply: FastifyReply
-): Promise<void> => {
+export const requireToken = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
   try {
     const authHeader = request.headers.authorization;
     const token = authHeader?.split(' ')[1];

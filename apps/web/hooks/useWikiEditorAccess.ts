@@ -12,7 +12,6 @@ export function useWikiEditorAccess({ isEditing, authorId }: WikiEditorAccessOpt
     if (!isAuthenticated) return router.replace('/auth/signin');
 
     if (isEditing && user?.id !== authorId) return router.replace('/');
-    
   }, [authorId, isAuthenticated, isEditing, router, user?.id]);
 
   const accessDenied = !isAuthenticated || (isEditing && user?.id !== authorId);

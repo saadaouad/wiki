@@ -15,7 +15,7 @@ const fetcher = async <T>([url, token]: readonly [string, string]): Promise<T> =
     throw new Error(msg ?? 'Request failed');
   }
   return json;
-}
+};
 
 export const useFetch = <TData = unknown>(endpoint: string, token?: string) => {
   const key = token ? ([`${API_URL}${endpoint}`, token] as const) : null;
@@ -28,4 +28,4 @@ export const useFetch = <TData = unknown>(endpoint: string, token?: string) => {
     data: !error ? data : null,
     loading: isLoading
   };
-}
+};

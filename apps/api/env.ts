@@ -83,10 +83,7 @@ const envSchema = z.object({
   OPENROUTER_MODEL: z.string().min(1),
   OPENROUTER_SITE_URL: z.string().url().default('http://localhost:3000'),
   OPENROUTER_APP_NAME: z.string().min(1).default('wiki'),
-  OPENROUTER_URL: z
-    .string()
-    .url()
-    .default('https://openrouter.ai/api/v1/chat/completions')
+  OPENROUTER_URL: z.string().url().default('https://openrouter.ai/api/v1/chat/completions')
 });
 
 // Type inference from schema

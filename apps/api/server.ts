@@ -5,8 +5,9 @@ import multipart from '@fastify/multipart';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
 import { errorHandler, registerRateLimit } from '@/middleware/index.ts';
+import { registerSwagger } from '@/plugins/swagger.ts';
 import { authRoutes, healthRoute, userRoutes, articleRoutes } from '@/routes/index.ts';
-import { env } from '@/env.ts';
+import { env, isDev } from '@/env.ts';
 
 const app = Fastify({
   logger: { level: env.LOG_LEVEL },
@@ -16,7 +17,7 @@ const app = Fastify({
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-await app.register(helmet);
+await app.register(helmet, isDev() ? { contentSecurityPolicy: false } : {});
 await app.register(multipart, {
   limits: {
     fileSize: 10 * 1024 * 1024,
@@ -30,6 +31,7 @@ await app.register(cors, {
 });
 
 await registerRateLimit(app);
+await registerSwagger(app);
 
 await app.register(healthRoute);
 await app.register(authRoutes, {

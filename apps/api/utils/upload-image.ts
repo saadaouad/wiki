@@ -25,7 +25,7 @@ export const uploadImageToCloudinary = async (fileBuffer: Buffer): Promise<Cloud
 
     stream.end(fileBuffer);
   });
-}
+};
 
 export const resolveImageUrl = async (
   request: FastifyRequest,
@@ -37,4 +37,4 @@ export const resolveImageUrl = async (
   }
 
   return imageUrl ?? null;
-}
+};
