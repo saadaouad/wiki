@@ -20,8 +20,7 @@ export default defineConfig({
         },
         test: {
           name: 'api-unit',
-          include: ['apps/api/tests/unit/*.test.ts'],
-          setupFiles: ['apps/api/tests/loadTestEnv.ts']
+          include: ['apps/api/tests/unit/*.test.ts']        
         }
       },
       {
@@ -42,7 +41,7 @@ export default defineConfig({
         test: {
           name: 'api-integration',
           include: ['apps/api/tests/integration/*.test.ts'],
-          globalSetup: ['apps/api/tests/setup/globalSetup.ts']
+          globalSetup: ['apps/api/tests/globalSetup.ts']
         }
       },
       {
@@ -53,7 +52,7 @@ export default defineConfig({
         test: {
           name: 'web-integration',
           include: ['apps/web/tests/integration/*.test.ts'],
-          globalSetup: ['apps/web/tests/setup/globalSetup.ts']
+          globalSetup: ['apps/web/tests/globalSetup.ts']
         }
       }
     ]
