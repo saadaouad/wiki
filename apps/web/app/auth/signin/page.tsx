@@ -58,15 +58,15 @@ const SignInForm = () => {
     <div className="flex min-h-[80vh] items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle>Sign in to your account</CardTitle>
+          <CardTitle data-testid="signin-title">Sign in to your account</CardTitle>
           <CardDescription>
             Don't have an account?{' '}
-            <Link className="text-primary underline" href="/auth/signup">
+            <Link className="text-primary underline" href="/auth/signup" data-testid="signup-link">
               Sign up
             </Link>
           </CardDescription>
         </CardHeader>
-        <form onSubmit={onSubmit} noValidate>
+        <form onSubmit={onSubmit} noValidate data-testid="signin-form">
           <CardContent className="flex flex-col mt-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
@@ -76,10 +76,15 @@ const SignInForm = () => {
                 autoComplete="email"
                 aria-invalid={!!errors.email}
                 className="py-5"
+                data-testid="email-input"
                 {...register('email')}
               />
               <div className="min-h-4 shrink-0" aria-live="polite">
-                {errors.email && <p className="text-destructive text-xs">{errors.email.message}</p>}
+                {errors.email && (
+                  <p className="text-destructive text-xs" data-testid="email-error">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -90,22 +95,30 @@ const SignInForm = () => {
                 autoComplete="current-password"
                 aria-invalid={!!errors.password}
                 className="py-5"
+                data-testid="password-input"
                 {...register('password')}
               />
               <div className="min-h-4 shrink-0" aria-live="polite">
                 {errors.password && (
-                  <p className="text-destructive text-xs">{errors.password.message}</p>
+                  <p className="text-destructive text-xs" data-testid="password-error">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
             </div>
             {errors.root && (
-              <p className="text-destructive text-sm" role="alert">
+              <p className="text-destructive text-sm" role="alert" data-testid="root-error">
                 {errors.root.message}
               </p>
             )}
           </CardContent>
           <CardFooter className="mt-6">
-            <Button type="submit" disabled={loading} className="w-full py-5 cursor-pointer">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full py-5 cursor-pointer"
+              data-testid="submit-button"
+            >
               {loading ? 'Signing in…' : 'Sign in'}
             </Button>
           </CardFooter>

@@ -59,15 +59,15 @@ const SignUpForm = () => {
     <div className="flex mt-10 items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle>Create a new account</CardTitle>
+          <CardTitle data-testid="signup-title">Create a new account</CardTitle>
           <CardDescription>
             Already have an account?{' '}
-            <Link className="text-primary underline" href="/auth/signin">
+            <Link className="text-primary underline" href="/auth/signin" data-testid="signin-link">
               Sign in
             </Link>
           </CardDescription>
         </CardHeader>
-        <form onSubmit={onSubmit} noValidate>
+        <form onSubmit={onSubmit} noValidate data-testid="signup-form">
           <CardContent className="flex flex-col mt-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="firstName">First name</Label>
@@ -77,11 +77,14 @@ const SignUpForm = () => {
                 autoComplete="given-name"
                 aria-invalid={!!errors.firstName}
                 className="py-5"
+                data-testid="firstName-input"
                 {...register('firstName')}
               />
               <div className="min-h-4 shrink-0" aria-live="polite">
                 {errors.firstName && (
-                  <p className="text-destructive text-xs">{errors.firstName.message}</p>
+                  <p className="text-destructive text-xs" data-testid="firstName-error">
+                    {errors.firstName.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -93,11 +96,14 @@ const SignUpForm = () => {
                 autoComplete="family-name"
                 aria-invalid={!!errors.lastName}
                 className="py-5"
+                data-testid="lastName-input"
                 {...register('lastName')}
               />
               <div className="min-h-4 shrink-0" aria-live="polite">
                 {errors.lastName && (
-                  <p className="text-destructive text-xs">{errors.lastName.message}</p>
+                  <p className="text-destructive text-xs" data-testid="lastName-error">
+                    {errors.lastName.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -109,10 +115,15 @@ const SignUpForm = () => {
                 autoComplete="email"
                 aria-invalid={!!errors.email}
                 className="py-5"
+                data-testid="email-input"
                 {...register('email')}
               />
               <div className="min-h-4 shrink-0" aria-live="polite">
-                {errors.email && <p className="text-destructive text-xs">{errors.email.message}</p>}
+                {errors.email && (
+                  <p className="text-destructive text-xs" data-testid="email-error">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -123,22 +134,30 @@ const SignUpForm = () => {
                 autoComplete="new-password"
                 aria-invalid={!!errors.password}
                 className="py-5"
+                data-testid="password-input"
                 {...register('password')}
               />
               <div className="min-h-4 shrink-0" aria-live="polite">
                 {errors.password && (
-                  <p className="text-destructive text-xs">{errors.password.message}</p>
+                  <p className="text-destructive text-xs" data-testid="password-error">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
             </div>
             {errors.root && (
-              <p className="text-destructive text-sm" role="alert">
+              <p className="text-destructive text-sm" role="alert" data-testid="root-error">
                 {errors.root.message}
               </p>
             )}
           </CardContent>
           <CardFooter className="mt-6">
-            <Button type="submit" disabled={loading} className="w-full py-5 cursor-pointer">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full py-5 cursor-pointer"
+              data-testid="submit-button"
+            >
               {loading ? 'Creating account…' : 'Sign up'}
             </Button>
           </CardFooter>
