@@ -1,7 +1,7 @@
 import { WikiEditor } from '@/components/index';
 
-const NewArticlePage = () => {
+const NewArticle = () => {
   return <WikiEditor />;
 };
 
-export default NewArticlePage;
+export default NewArticle;

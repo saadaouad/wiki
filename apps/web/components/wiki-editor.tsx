@@ -108,14 +108,18 @@ const WikiEditor = ({
   const pageTitle = isEditing ? 'Edit Article' : 'Create New Article';
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl" data-testid="wiki-editor">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">{pageTitle}</h1>
+        <h1 className="text-3xl font-bold" data-testid="wiki-editor-title">
+          {pageTitle}
+        </h1>
         {isEditing && articleId && (
-          <p className="text-muted-foreground mt-2">Editing article: {title}</p>
+          <p className="text-muted-foreground mt-2" data-testid="wiki-editor-subtitle">
+            Editing article: {title}
+          </p>
         )}
       </div>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6" data-testid="wiki-editor-form">
         <Card>
           <CardHeader>
             <CardTitle>Article Title</CardTitle>
@@ -130,8 +134,13 @@ const WikiEditor = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className={errors.title ? 'border-destructive' : ''}
+                data-testid="title-input"
               />
-              {errors.title && <p className="text-sm text-destructive">{errors.title}</p>}
+              {errors.title && (
+                <p className="text-sm text-destructive" data-testid="title-error">
+                  {errors.title}
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -156,7 +165,11 @@ const WikiEditor = ({
                   height={500}
                 />
               </div>
-              {errors.content && <p className="text-sm text-destructive">{errors.content}</p>}
+              {errors.content && (
+                <p className="text-sm text-destructive" data-testid="content-error">
+                  {errors.content}
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -183,6 +196,7 @@ const WikiEditor = ({
                   onChange={handleFileUpload}
                   className="sr-only"
                   accept="image/*"
+                  data-testid="file-upload-input"
                 />
               </div>
               {files.length > 0 && (
@@ -227,6 +241,7 @@ const WikiEditor = ({
                     variant="outline"
                     disabled={loading}
                     className="cursor-pointer"
+                    data-testid="cancel-button"
                   >
                     Cancel
                   </Button>
@@ -249,7 +264,12 @@ const WikiEditor = ({
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-              <Button type="submit" disabled={loading} className="min-w-[100px] cursor-pointer">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="min-w-[100px] cursor-pointer"
+                data-testid="submit-button"
+              >
                 {loading ? 'Saving...' : 'Save Article'}
               </Button>
             </div>

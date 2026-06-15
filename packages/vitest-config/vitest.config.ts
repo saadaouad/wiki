@@ -1,5 +1,6 @@
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -41,18 +42,20 @@ export default defineConfig({
         test: {
           name: 'api-integration',
           include: ['apps/api/tests/integration/*.test.ts'],
-          globalSetup: ['apps/api/tests/globalSetup.ts']
+          globalSetup: ['apps/api/tests/setup.ts']
         }
       },
       {
         extends: true,
+        plugins: [react()],
         resolve: {
           alias: { '@': resolve(repoRoot, 'apps/web') }
         },
         test: {
           name: 'web-integration',
-          include: ['apps/web/tests/integration/*.test.ts'],
-          globalSetup: ['apps/web/tests/globalSetup.ts']
+          include: ['apps/web/tests/integration/**/*.test.ts'],
+          setupFiles: ['apps/web/tests/setup.ts'],
+          environment: 'jsdom'
         }
       }
     ]

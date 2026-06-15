@@ -10,7 +10,8 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
-    "test:unit": "vitest run --config ../../packages/vitest-config/vitest.config.ts --project web-unit"
+    "test:unit": "vitest run --config ../../packages/vitest-config/vitest.config.ts --project web-unit",
+    "test:integration": "vitest run --config ../../packages/vitest-config/vitest.config.ts --project web-integration"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -38,8 +39,13 @@
   "devDependencies": {
     "@repo/biome-config": "*",
     "@repo/typescript-config": "*",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "custom-env": "^2.0.6",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2"
+    "@types/react-dom": "19.2.2",
+    "jsdom": "^29.1.1"
   }
 }
