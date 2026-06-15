@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import SignUpForm from '@/app/auth/signup/page';
+import SignUp from '@/app/auth/signup/page';
 import { authMock, mockFetchResponse, setupAuthTest } from '@/mocks/auth.mock';
 import { renderWithProviders } from '@/tests/helpers/renderWithProviders';
 
@@ -18,7 +18,7 @@ async function fillSignUpForm(user: UserEvent) {
 }
 
 async function renderSignUp() {
-  const result = await renderWithProviders(createElement(SignUpForm));
+  const result = await renderWithProviders(createElement(SignUp));
 
   await waitFor(() => {
     expect(screen.getByTestId('signup-form')).toBeInTheDocument();
@@ -28,7 +28,9 @@ async function renderSignUp() {
 }
 
 describe('Sign up integration', () => {
-  beforeEach(setupAuthTest);
+  beforeEach(async () => {
+    await setupAuthTest();
+  });
 
   it('renders the sign-up form with all fields and submit button', async () => {
     await renderSignUp();

@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { toast } from 'sonner';
 
-import SignInForm from '@/app/auth/signin/page';
+import SignIn from '@/app/auth/signin/page';
 import { authMock, mockFetchResponse, setupAuthTest } from '@/mocks/auth.mock';
 import { renderWithProviders } from '@/tests/helpers/renderWithProviders';
 
 async function renderSignIn() {
-  const result = await renderWithProviders(createElement(SignInForm));
+  const result = await renderWithProviders(createElement(SignIn));
 
   await waitFor(() => {
     expect(screen.getByTestId('signin-form')).toBeInTheDocument();
@@ -20,7 +20,9 @@ async function renderSignIn() {
 }
 
 describe('Sign in integration', () => {
-  beforeEach(setupAuthTest);
+  beforeEach(async () => {
+    await setupAuthTest();
+  });
 
   it('renders the sign-in form with email, password, and submit button', async () => {
     await renderSignIn();

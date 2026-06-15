@@ -24,7 +24,7 @@ type SignUpValues = z.input<typeof registerSchema>;
 
 type RegisterResponse = { token?: string; error?: string };
 
-const SignUpForm = () => {
+const SignUp = () => {
   const router = useRouter();
   const { setSessionToken } = useAuth();
   const { accessDenied } = useRedirectIfAuthenticated();
@@ -167,4 +167,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignUp;

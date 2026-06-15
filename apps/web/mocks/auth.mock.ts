@@ -1,3 +1,4 @@
+import { mutate } from 'swr';
 import { vi } from 'vitest';
 
 export const authMock = {
@@ -51,7 +52,8 @@ export function mockFetchResponse(body: unknown, ok = true) {
   } as Response);
 }
 
-export function setupAuthTest() {
+export async function setupAuthTest() {
   vi.clearAllMocks();
   vi.stubGlobal('fetch', vi.fn());
+  await mutate(() => true, undefined, { revalidate: false });
 }

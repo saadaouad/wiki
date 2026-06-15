@@ -14,9 +14,13 @@ const ReactMarkdown = dynamic(() => import('react-markdown'), {
 
 const WikiArticleViewer = ({ article }: { article: Article }) => {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl" data-testid="article-viewer">
       <nav className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
-        <Link href="/" className="flex items-center hover:text-foreground transition-colors">
+        <Link
+          href="/"
+          className="flex items-center hover:text-foreground transition-colors"
+          data-testid="article-home-link"
+        >
           <Home className="h-4 w-4 mr-1" />
           Home
         </Link>
@@ -25,9 +29,11 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
       </nav>
       <div className="flex justify-between items-start mb-6">
         <div className="flex-1">
-          <h1 className="text-4xl font-bold text-foreground mb-4">{article.title}</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-4" data-testid="article-title">
+            {article.title}
+          </h1>
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center">
+            <div className="flex items-center" data-testid="article-author">
               <User className="h-4 w-4 mr-1" />
               <span>
                 By {article.author.firstName} {article.author.lastName}
@@ -39,7 +45,7 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
             </div>
             <div className="flex items-center">
               <Badge variant="secondary">Article</Badge>
-              <div className="ml-3 flex items-center text-sm text-muted-foreground">
+              <div className="ml-3 flex items-center text-sm text-muted-foreground" data-testid="article-view-count">
                 <Eye className="h-4 w-4 mr-1" />
                 <span>{article.articleView ? article.articleView : '—'}</span>
                 <span className="ml-1">views</span>
@@ -48,8 +54,12 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
           </div>
         </div>
         <AuthorizationProvider authorId={article.author.id}>
-          <div className="ml-4 flex items-center gap-2">
-            <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
+          <div className="ml-4 flex items-center gap-2" data-testid="article-author-actions">
+            <Link
+              href={`/wiki/edit/${article.slug}`}
+              className="cursor-pointer"
+              data-testid="edit-article-link"
+            >
               <Button variant="outline" className="cursor-pointer">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit Article
@@ -74,7 +84,7 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
               </div>
             </div>
           )}
-          <div className="prose prose-stone dark:prose-invert max-w-none">
+          <div className="prose prose-stone dark:prose-invert max-w-none" data-testid="article-content">
             <ReactMarkdown
               components={{
                 h1: ({ children }) => (
@@ -145,14 +155,18 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
         </CardContent>
       </Card>
       <div className="mt-8 flex justify-between items-center">
-        <Link href="/">
+        <Link href="/" data-testid="back-to-articles-link">
           <Button variant="outline" className="cursor-pointer">
             ← Back to Articles
           </Button>
         </Link>
         <AuthorizationProvider authorId={article.author.id}>
-          <div className="flex items-center gap-2">
-            <Link href={`/wiki/edit/${article.slug}`} className="cursor-pointer">
+          <div className="flex items-center gap-2" data-testid="article-footer-actions">
+            <Link
+              href={`/wiki/edit/${article.slug}`}
+              className="cursor-pointer"
+              data-testid="edit-this-article-link"
+            >
               <Button className="cursor-pointer">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit This Article

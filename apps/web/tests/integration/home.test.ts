@@ -19,7 +19,9 @@ async function renderHome() {
 }
 
 describe('Home page integration', () => {
-  beforeEach(setupAuthTest);
+  beforeEach(async () => {
+    await setupAuthTest();
+  });
 
   it('fetches and renders articles from the API', async () => {
     mockFetchResponse(homeMock.responses.articles);

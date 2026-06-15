@@ -24,7 +24,7 @@ type SignInValues = z.input<typeof loginSchema>;
 
 type LoginResponse = { token?: string; error?: string };
 
-const SignInForm = () => {
+const SignIn = () => {
   const router = useRouter();
   const { setSessionToken } = useAuth();
   const { accessDenied } = useRedirectIfAuthenticated();
@@ -128,4 +128,4 @@ const SignInForm = () => {
   );
 };
 
-export default SignInForm;
+export default SignIn;
