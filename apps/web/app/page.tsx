@@ -9,7 +9,10 @@ const Home = async () => {
   return (
     <div>
       <NewArticle />
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-4 md:mx-0">
+      <div
+        className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-4 md:mx-0"
+        data-testid="articles-list"
+      >
         {articlesData.articles.map((article: Article) => (
           <WikiCard
             key={article.id}

@@ -12,8 +12,8 @@ export const NewArticle = () => {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="mt-10 text-right">
-      <Link href="wiki/new" className="cursor-pointer">
+    <div className="mt-10 text-right" data-testid="new-article">
+      <Link href="wiki/new" className="cursor-pointer" data-testid="new-article-link">
         <Button variant="outline" className="cursor-pointer">
           <Plus className="h-4 w-4" />
           New Article

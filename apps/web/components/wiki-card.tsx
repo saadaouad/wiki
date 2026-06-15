@@ -14,7 +14,7 @@ import type { WikiCardProps } from '@/types/index';
 
 export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) => {
   return (
-    <Card>
+    <Card data-testid="article-card">
       <CardHeader className="pb-2 pt-1">
         <div className="flex items-center gap-3 text-xs text-muted-foreground">
           <div className="flex items-center">
@@ -32,7 +32,7 @@ export const WikiCard = ({ title, author, date, summary, href }: WikiCardProps) 
         <CardDescription>{truncateText(summary)}</CardDescription>
       </CardContent>
       <CardFooter className="pt-2">
-        <Link href={href} className="text-blue-600 hover:underline text-sm font-medium w-fit">
+        <Link href={href} className="text-blue-600 hover:underline text-sm font-medium w-fit" data-testid="article-link">
           Read article &rarr;
         </Link>
       </CardFooter>
