@@ -52,6 +52,31 @@ export const wikiMock = {
         lastName: 'Smith',
         createdAt: '2024-01-01T00:00:00.000Z'
       }
+    },
+    updateSuccess: {
+      article: {
+        id: 'article-1',
+        title: 'Updated Wiki Guide',
+        slug: 'getting-started',
+        content: 'Updated article content.',
+        summary: 'A short summary of getting started.',
+        createdAt: '2024-03-15T12:00:00.000Z',
+        articleView: 42,
+        author: {
+          id: 'user-1',
+          email: 'jane@example.com',
+          firstName: 'Jane',
+          lastName: 'Doe',
+          createdAt: '2024-01-01T00:00:00.000Z'
+        }
+      }
     }
+  },
+  validation: {
+    titleRequired: 'Title is required',
+    contentRequired: 'Content is required'
+  },
+  messages: {
+    updateSuccess: 'Article updated successfully!'
   }
 } as const;
