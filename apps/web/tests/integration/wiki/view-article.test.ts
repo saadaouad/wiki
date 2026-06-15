@@ -48,7 +48,7 @@ describe('View article page integration', () => {
       `${process.env.NEXT_PUBLIC_API_URL}/articles/${wikiMock.slug}`,
       { cache: 'no-cache' }
     );
-    expect(screen.getByTestId('article-title')).toHaveTextContent(wikiMock.article.title);
+    expect(screen.getByTestId('article-title')).toHaveTextContent(wikiMock.articles[0].title);
     expect(screen.getByTestId('article-author')).toHaveTextContent('By Jane Doe');
     expect(screen.getByTestId('article-view-count')).toHaveTextContent(/42/);
     expect(screen.getByTestId('article-view-count')).toHaveTextContent(/views/);

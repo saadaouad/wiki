@@ -47,7 +47,7 @@ function mockEditArticleFetches(
 
     if (
       options.includePatch &&
-      urlString.endsWith(`/articles/${wikiMock.article.id}`) &&
+      urlString.endsWith(`/articles/${wikiMock.articles[0].id}`) &&
       method === 'PATCH'
     ) {
       return Promise.resolve({
@@ -126,10 +126,10 @@ describe('Edit article page integration', () => {
     );
     expect(screen.getByTestId('wiki-editor-title')).toHaveTextContent('Edit Article');
     expect(screen.getByTestId('wiki-editor-subtitle')).toHaveTextContent(
-      `Editing article: ${wikiMock.article.title}`
+      `Editing article: ${wikiMock.articles[0].title}`
     );
-    expect(screen.getByTestId('title-input')).toHaveValue(wikiMock.article.title);
-    expect(screen.getByTestId('content-input')).toHaveValue(wikiMock.article.content);
+    expect(screen.getByTestId('title-input')).toHaveValue(wikiMock.articles[0].title);
+    expect(screen.getByTestId('content-input')).toHaveValue(wikiMock.articles[0].content);
     expect(screen.getByTestId('submit-button')).toHaveTextContent('Save Article');
     expect(screen.getByTestId('cancel-button')).toBeInTheDocument();
   });
@@ -163,7 +163,7 @@ describe('Edit article page integration', () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
-        `${process.env.NEXT_PUBLIC_API_URL}/articles/${wikiMock.article.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/articles/${wikiMock.articles[0].id}`,
         expect.objectContaining({
           method: 'PATCH',
           headers: { Authorization: 'Bearer jwt-token' }
@@ -178,7 +178,7 @@ describe('Edit article page integration', () => {
 
     const formData = patchOptions?.body as FormData;
     expect(formData.get('title')).toBe('Updated Wiki Guide');
-    expect(formData.get('content')).toBe(wikiMock.article.content);
+    expect(formData.get('content')).toBe(wikiMock.articles[0].content);
 
     expect(toast.success).toHaveBeenCalledWith(wikiMock.messages.updateSuccess);
     expect(useRouter().push).toHaveBeenCalledWith(`/wiki/${wikiMock.slug}`);
