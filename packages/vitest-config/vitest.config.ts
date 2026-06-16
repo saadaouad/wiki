@@ -21,7 +21,7 @@ export default defineConfig({
         },
         test: {
           name: 'api-unit',
-          include: ['apps/api/tests/unit/*.test.ts']        
+          include: ['apps/api/tests/unit/*.test.ts']
         }
       },
       {
