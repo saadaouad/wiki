@@ -45,7 +45,10 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
             </div>
             <div className="flex items-center">
               <Badge variant="secondary">Article</Badge>
-              <div className="ml-3 flex items-center text-sm text-muted-foreground" data-testid="article-view-count">
+              <div
+                className="ml-3 flex items-center text-sm text-muted-foreground"
+                data-testid="article-view-count"
+              >
                 <Eye className="h-4 w-4 mr-1" />
                 <span>{article.articleView ? article.articleView : '—'}</span>
                 <span className="ml-1">views</span>
@@ -84,7 +87,10 @@ const WikiArticleViewer = ({ article }: { article: Article }) => {
               </div>
             </div>
           )}
-          <div className="prose prose-stone dark:prose-invert max-w-none" data-testid="article-content">
+          <div
+            className="prose prose-stone dark:prose-invert max-w-none"
+            data-testid="article-content"
+          >
             <ReactMarkdown
               components={{
                 h1: ({ children }) => (

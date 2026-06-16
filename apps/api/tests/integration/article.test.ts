@@ -57,9 +57,7 @@ describe('Article Endpoints', () => {
         throw new Error('Failed to create test article');
       }
 
-      const response = await request(app.server)
-        .get(`/api/articles/${article.slug}`)
-        .expect(200);
+      const response = await request(app.server).get(`/api/articles/${article.slug}`).expect(200);
 
       expect(response.body).toHaveProperty('article');
       expect(response.body.article).toMatchObject({
@@ -70,9 +68,7 @@ describe('Article Endpoints', () => {
     });
 
     it('should return 404 for a missing article', async () => {
-      const response = await request(app.server)
-        .get('/api/articles/does-not-exist')
-        .expect(404);
+      const response = await request(app.server).get('/api/articles/does-not-exist').expect(404);
 
       expect(response.body).toHaveProperty('error', 'Article not found');
     });
@@ -131,7 +127,7 @@ describe('Article Endpoints', () => {
       expect(response.body).toHaveProperty('error', 'Access token required');
     });
 
-    it('should return 403 when updating another user\'s article', async () => {
+    it("should return 403 when updating another user's article", async () => {
       const { user } = await createTestUser();
       const { token: otherToken } = await createTestUser();
       const article = await createTestArticle(user.id);
@@ -187,14 +183,12 @@ describe('Article Endpoints', () => {
         throw new Error('Failed to create test article');
       }
 
-      const response = await request(app.server)
-        .delete(`/api/articles/${article.id}`)
-        .expect(401);
+      const response = await request(app.server).delete(`/api/articles/${article.id}`).expect(401);
 
       expect(response.body).toHaveProperty('error', 'Access token required');
     });
 
-    it('should return 403 when deleting another user\'s article', async () => {
+    it("should return 403 when deleting another user's article", async () => {
       const { user } = await createTestUser();
       const { token: otherToken } = await createTestUser();
       const article = await createTestArticle(user.id);
