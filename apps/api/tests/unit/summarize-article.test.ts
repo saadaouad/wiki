@@ -2,6 +2,18 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { summarizeArticle } from '@/utils/summarize-article.ts';
 
+vi.mock('@/env.ts', () => {
+  const env = {
+    OPENROUTER_API_KEY: 'test-key',
+    OPENROUTER_MODEL: 'test-model',
+    OPENROUTER_SITE_URL: 'http://localhost:3000',
+    OPENROUTER_APP_NAME: 'wiki-test',
+    OPENROUTER_URL: 'https://openrouter.ai/api/v1/chat/completions'
+  };
+
+  return { env, default: env };
+});
+
 const mockFetch = vi.fn<typeof fetch>();
 
 beforeEach(() => {

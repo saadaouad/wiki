@@ -3,7 +3,16 @@ import { decodeProtectedHeader, SignJWT } from 'jose';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { env } from '@/env.ts';
-import { generateToken, verifyToken } from '@/utils/index.ts';
+import { generateToken, verifyToken } from '@/utils/jwt.ts';
+
+vi.mock('@/env.ts', () => {
+  const env = {
+    JWT_SECRET: 'x'.repeat(32),
+    JWT_EXPIRES_IN: '2h'
+  };
+
+  return { env, default: env };
+});
 
 describe('generateToken', () => {
   beforeEach(() => {
