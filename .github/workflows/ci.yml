@@ -11,27 +11,6 @@ concurrency:
 permissions:
   contents: read
 
-env:
-  TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-  NEXT_PUBLIC_API_URL: http://localhost:3001/api
-  NODE_ENV: test
-  APP_STAGE: test
-  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wiki_test?sslmode=disable
-  JWT_SECRET: 12345678901234567890123456789012
-  JWT_EXPIRES_IN: 2h
-  BCRYPT_ROUNDS: 10
-  PORT: 3002
-  CLOUDINARY_CLOUD_NAME: test-cloud
-  CLOUDINARY_API_KEY: test-key
-  CLOUDINARY_API_SECRET: test-secret
-  UPSTASH_REDIS_REST_URL: https://example.upstash.io
-  UPSTASH_REDIS_REST_TOKEN: test-token
-  OPENROUTER_API_KEY: test-key
-  OPENROUTER_MODEL: test-model
-  OPENROUTER_SITE_URL: http://localhost:3000
-  OPENROUTER_APP_NAME: wiki-test
-  OPENROUTER_URL: https://openrouter.ai/api/v1/chat/completions
-
 jobs:
   ci:
     name: Build & Test pipeline
@@ -46,10 +25,25 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U postgres"
+          --health-cmd="pg_isready -U postgres -d wiki_test"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+    env:
+      TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+      NEXT_PUBLIC_API_URL: http://localhost:3001/api
+      APP_STAGE: test
+      NODE_ENV: test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/wiki_test
+      JWT_SECRET: ci-test-jwt-secret-minimum-length-ok-32chars
+      JWT_EXPIRES_IN: 2h
+      CLOUDINARY_CLOUD_NAME: test-cloud
+      CLOUDINARY_API_KEY: test-key
+      CLOUDINARY_API_SECRET: test-secret
+      UPSTASH_REDIS_REST_URL: https://example.upstash.io
+      UPSTASH_REDIS_REST_TOKEN: test-token
+      OPENROUTER_API_KEY: test-key
+      OPENROUTER_MODEL: test-model
     steps:
       - uses: actions/checkout@v4
         with:
