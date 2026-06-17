@@ -21,7 +21,7 @@ const isTest = process.env.APP_STAGE === 'test';
 // Load .env files based on environment (apiRoot so cwd-independent e.g. Vitest monorepo root)
 if (isDevelopment) {
   loadEnv(true, apiRoot);
-} else if (isTest) {
+} else if (isTest && !process.env.CI) {
   loadEnv('test', apiRoot);
 }
 

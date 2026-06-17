@@ -9,10 +9,7 @@ const title = z
 const content = z
   .string()
   .min(1, 'Content is required')
-  .max(
-    50_000,
-    'Content must be at most 50_000 characters'
-  );
+  .max(50_000, 'Content must be at most 50_000 characters');
 
 const imageUrl = z
   .union([z.string().trim().url(), z.literal('')])
@@ -26,11 +23,13 @@ export const createArticleSchema = z.object({
   imageUrl
 });
 
-export const updateArticleFieldsSchema = z.object({
-  title,
-  content,
-  imageUrl
-}).partial();
+export const updateArticleFieldsSchema = z
+  .object({
+    title,
+    content,
+    imageUrl
+  })
+  .partial();
 
 export const updateArticleSchema = updateArticleFieldsSchema.refine(
   (body) => Object.values(body).some((v) => v !== undefined),

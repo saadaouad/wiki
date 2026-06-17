@@ -10,7 +10,7 @@ const cloudinaryResult = {
   public_id: 'articles/abc123'
 };
 
-vi.mock('@/lib/cloudinary.ts', () => ({
+vi.mock('@/lib/index.ts', () => ({
   cloudinaryConfig: {
     uploader: {
       upload_stream: (...args: unknown[]) => uploadStream(...args)

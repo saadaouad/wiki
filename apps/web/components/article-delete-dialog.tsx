@@ -38,7 +38,11 @@ export const ArticleDeleteDialog = ({ articleId }: { articleId: string }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" className="ml-2 cursor-pointer" data-testid="delete-article-button">
+        <Button
+          variant="destructive"
+          className="ml-2 cursor-pointer"
+          data-testid="delete-article-button"
+        >
           <Trash className="h-4 w-4 mr-2" />
           Delete
         </Button>

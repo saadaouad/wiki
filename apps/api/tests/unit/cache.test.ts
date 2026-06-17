@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { createListCache, pageView } from '@/utils/index.ts';
+import { createListCache, pageView } from '@/utils/cache.ts';
 
 const incr = vi.fn();
 
-vi.mock('@/lib/redis.ts', () => ({
+vi.mock('@/lib/index.ts', () => ({
   redis: { incr: (...args: unknown[]) => incr(...args) }
 }));
 

@@ -60,9 +60,7 @@ function mockEditArticleFetches(
   });
 }
 
-async function renderEditArticleAsAuthor(
-  options: { includePatch?: boolean } = {}
-) {
+async function renderEditArticleAsAuthor(options: { includePatch?: boolean } = {}) {
   vi.mocked(getCookie).mockReturnValue('jwt-token');
   mockEditArticleFetches(wikiMock.responses.meAsAuthor, options);
 
