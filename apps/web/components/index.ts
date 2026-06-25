@@ -30,6 +30,7 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from './ui/nav
 import WikiArticleViewer from './wiki-article-viewer';
 import { WikiCard } from './wiki-card';
 import WikiEditor from './wiki-editor';
+import ErrorComponent from './error-boundary';
 
 export {
   AlertDialog,
@@ -61,5 +62,6 @@ export {
   NewArticle,
   WikiArticleViewer,
   WikiCard,
-  WikiEditor
+  WikiEditor,
+  ErrorComponent
 };
