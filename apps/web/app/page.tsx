@@ -3,8 +3,9 @@ import type { Article } from '@/types/index';
 
 const Home = async () => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/articles`;
-  const articles = await fetch(endpoint, { cache: 'no-cache' });
-  const articlesData = await articles.json();
+  const articlesResponse = await fetch(endpoint, { cache: 'no-cache' });
+  const articlesData = await articlesResponse.json();
+  const articles = Array.isArray(articlesData.articles) ? articlesData.articles : [];
 
   return (
     <div>
@@ -13,7 +14,7 @@ const Home = async () => {
         className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-4 md:mx-0"
         data-testid="articles-list"
       >
-        {articlesData.articles.map((article: Article) => (
+        {articles.map((article: Article) => (
           <WikiCard
             key={article.id}
             title={article.title}
