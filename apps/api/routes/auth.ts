@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 
 import { login, register } from '@/controllers/auth.ts';
-import { authRateLimitConfig } from '@/middleware/index.ts';
+import { authRateLimitConfig } from '@/plugins/rateLimit.ts';
 import { loginSchema, registerSchema } from '@repo/schema-validation';
 
 export const authRoutes = async (app: FastifyInstance) => {

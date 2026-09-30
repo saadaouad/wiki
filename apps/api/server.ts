@@ -4,7 +4,8 @@ import helmet from '@fastify/helmet';
 import multipart from '@fastify/multipart';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 
-import { errorHandler, registerRateLimit } from '@/middleware/index.ts';
+import { errorHandler } from '@/plugins/errorHandler.ts';
+import { registerRateLimit } from '@/plugins/rateLimit.ts';
 import { registerSwagger } from '@/plugins/swagger.ts';
 import { authRoutes, healthRoute, userRoutes, articleRoutes } from '@/routes/index.ts';
 import { env, isDev } from '@/env.ts';

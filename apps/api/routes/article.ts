@@ -15,11 +15,8 @@ import {
   updateArticle
 } from '@/controllers/article.ts';
 import { bearerAuthSecurity, multipartArticleDescription } from '@/openapi.ts';
-import {
-  requireToken,
-  parseArticleMultipart,
-  validateUpdateArticleBody
-} from '@/middleware/index.ts';
+import { requireToken } from '@/hooks/auth.ts';
+import { parseArticleMultipart, validateUpdateArticleBody } from '@/hooks/articleMultipart.ts';
 
 export const articleRoutes = async (app: FastifyInstance) => {
   app.get(
